@@ -1,8 +1,9 @@
 import { Coffee, Croissant, Sparkles } from "lucide-react";
+import { sectionShell } from "@/lib/section";
 
 export function About() {
   return (
-    <section id="about" className="border-t border-calmo-burnt-brown/8 px-6 py-24 sm:px-8 sm:py-32">
+    <section id="about" className={sectionShell}>
       <div className="mx-auto grid max-w-6xl gap-16 lg:grid-cols-[1fr_1.2fr] lg:gap-24 lg:items-center">
         <div>
           <p className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
@@ -32,7 +33,7 @@ export function About() {
             ].map(({ icon: Icon, label }) => (
               <li
                 key={label}
-                className="inline-flex items-center gap-2 rounded-full border border-calmo-burnt-brown/12 bg-white/30 px-4 py-2 font-body text-xs font-medium uppercase tracking-[0.12em] text-calmo-burnt-brown/70"
+                className="inline-flex items-center gap-2 rounded-full border border-calmo-burnt-brown/12 bg-white/30 px-4 py-2 font-body text-xs font-medium uppercase tracking-[0.12em] text-calmo-burnt-brown/70 transition-colors hover:border-calmo-blue hover:bg-calmo-blue/20 hover:text-calmo-burnt-brown"
               >
                 <Icon className="h-3.5 w-3.5 text-calmo-red-brown" strokeWidth={1.75} />
                 {label}

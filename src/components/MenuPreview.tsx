@@ -1,13 +1,7 @@
-import { cn } from "@/lib/utils";
+import { MenuFullAccordion, MenuItemCard, type MenuItem } from "@/components/MenuFullAccordion";
+import { sectionShell } from "@/lib/section";
 
-type MenuItem = {
-  name: string;
-  description: string;
-  category: "diner" | "cafe";
-  tag?: string;
-};
-
-const menuItems: MenuItem[] = [
+const previewMenuItems: MenuItem[] = [
   {
     name: "The Calmo Breakfast Sando",
     description: "Soft scrambled eggs, smoked gouda, house sauce",
@@ -33,20 +27,56 @@ const menuItems: MenuItem[] = [
   },
 ];
 
-const categoryStyles = {
-  diner: {
-    badge: "bg-calmo-red-brown/12 text-calmo-red-brown",
-    accent: "group-hover:border-calmo-red-brown/30",
+const extendedMenuItems: MenuItem[] = [
+  {
+    name: "Avocado Toast",
+    description: "Sourdough, chili crisp, herb salad, soft egg",
+    category: "cafe",
   },
-  cafe: {
-    badge: "bg-calmo-blue/35 text-calmo-burnt-brown",
-    accent: "group-hover:border-calmo-blue/50",
+  {
+    name: "Patty Melt",
+    description: "Swiss, caramelized onions, rye, comeback sauce",
+    category: "diner",
   },
-};
+  {
+    name: "Rose Latté",
+    description: "House rose syrup, espresso, steamed oat milk",
+    category: "cafe",
+    tag: "Drink",
+  },
+  {
+    name: "Chicken & Waffles",
+    description: "Buttermilk waffle, maple hot honey, pickles",
+    category: "diner",
+  },
+  {
+    name: "Lemon Poppy Scone",
+    description: "Glazed, baked every morning",
+    category: "cafe",
+    tag: "Pastry",
+  },
+  {
+    name: "Kimchi Grilled Cheese",
+    description: "Aged cheddar, sourdough, house kimchi butter",
+    category: "diner",
+    tag: "Fusion",
+  },
+  {
+    name: "Calmo Drip Coffee",
+    description: "Rotating single-origin, served hot or iced",
+    category: "cafe",
+    tag: "Drink",
+  },
+  {
+    name: "Mushroom Reuben",
+    description: "Marinated portobello, sauerkraut, swiss, rye",
+    category: "diner",
+  },
+];
 
 export function MenuPreview() {
   return (
-    <section id="menu" className="border-t border-calmo-burnt-brown/8 bg-white/20 px-6 py-24 sm:px-8 sm:py-32">
+    <section id="menu" className={`${sectionShell} bg-white/20`}>
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -63,47 +93,15 @@ export function MenuPreview() {
           </p>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:gap-6">
-          {menuItems.map((item) => {
-            const styles = categoryStyles[item.category];
-            return (
-              <article
-                key={item.name}
-                className={cn(
-                  "group rounded-2xl border border-calmo-burnt-brown/10 bg-calmo-beige/60 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-calmo-burnt-brown/5 sm:p-8",
-                  styles.accent,
-                )}
-              >
-                <div className="mb-4 flex items-start justify-between gap-4">
-                  <span
-                    className={cn(
-                      "inline-block rounded-full px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-[0.16em]",
-                      styles.badge,
-                    )}
-                  >
-                    {item.category === "diner" ? "Diner" : "Café"}
-                  </span>
-                  {item.tag && (
-                    <span className="font-body text-[10px] font-medium uppercase tracking-[0.16em] text-calmo-burnt-brown/40">
-                      {item.tag}
-                    </span>
-                  )}
-                </div>
+        <div className="flex flex-col gap-5 lg:gap-6">
+          <div className="grid gap-5 sm:grid-cols-2 lg:gap-6">
+            {previewMenuItems.map((item) => (
+              <MenuItemCard key={item.name} item={item} />
+            ))}
+          </div>
 
-                <h3 className="font-display text-2xl leading-snug text-calmo-burnt-brown sm:text-[1.65rem]">
-                  {item.name}
-                </h3>
-                <p className="mt-3 font-body text-sm leading-relaxed text-calmo-burnt-brown/65 sm:text-base">
-                  {item.description}
-                </p>
-              </article>
-            );
-          })}
+          <MenuFullAccordion items={extendedMenuItems} />
         </div>
-
-        <p className="mt-12 text-center font-accent text-sm italic text-calmo-burnt-brown/50">
-          Full menu available in-store. Pastries change daily — visit us to see what&apos;s fresh.
-        </p>
       </div>
     </section>
   );

@@ -1,4 +1,5 @@
-import { Clock, Instagram, MapPin } from "lucide-react";
+import { Clock, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { sectionShell } from "@/lib/section";
 
 const hours = [
   { days: "Mon – Thu", time: "7am – 4pm" },
@@ -6,23 +7,60 @@ const hours = [
   { days: "Sun", time: "8am – 4pm" },
 ];
 
+const address = {
+  line1: "1227 Dundas St W",
+  line2: "Toronto, ON M6J 1X6",
+  mapsUrl:
+    "https://www.google.com/maps/search/?api=1&query=1227+Dundas+St+W,+Toronto,+ON+M6J+1X6",
+};
+
+const contactLinks = [
+  {
+    href: "tel:+14165550127",
+    label: "Call Calmo",
+    icon: Phone,
+  },
+  {
+    href: "mailto:hello@calmo.ca",
+    label: "Email Calmo",
+    icon: Mail,
+  },
+  {
+    href: "https://instagram.com",
+    label: "Calmo on Instagram",
+    icon: Instagram,
+    external: true,
+  },
+];
+
+const iconLinkClassName =
+  "inline-flex h-10 w-10 items-center justify-center rounded-full border border-calmo-burnt-brown/12 text-calmo-burnt-brown/60 transition-all hover:border-calmo-blue hover:bg-calmo-blue/20 hover:text-calmo-blue";
+
 export function Footer() {
   return (
-    <footer id="visit" className="border-t border-calmo-burnt-brown/8 px-6 py-20 sm:px-8 sm:py-24">
+    <footer id="visit" className={sectionShell}>
       <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-16">
         <div>
           <h2 className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
             Location
           </h2>
-          <address className="mt-4 space-y-2 not-italic">
-            <p className="flex items-start gap-2.5 font-body text-sm leading-relaxed text-calmo-burnt-brown/75">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-calmo-red-brown" strokeWidth={1.75} />
+          <address className="mt-4 not-italic">
+            <a
+              href={address.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-start gap-2.5 font-body text-sm leading-relaxed text-calmo-burnt-brown/75 transition-colors hover:text-calmo-blue"
+            >
+              <MapPin
+                className="mt-0.5 h-4 w-4 shrink-0 text-calmo-red-brown transition-colors group-hover:text-calmo-blue"
+                strokeWidth={1.75}
+              />
               <span>
-                1227 Dundas St W
+                {address.line1}
                 <br />
-                Toronto, ON M6J 1X6
+                {address.line2}
               </span>
-            </p>
+            </a>
           </address>
           <p className="mt-4 inline-block rounded-full bg-calmo-blue/30 px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-calmo-burnt-brown/70">
             Walk-ins only
@@ -51,18 +89,22 @@ export function Footer() {
 
         <div className="sm:col-span-2 lg:col-span-1">
           <h2 className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
-            Follow
+            Contact
           </h2>
           <div className="mt-4 flex items-center gap-4">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Calmo on Instagram"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-calmo-burnt-brown/12 text-calmo-burnt-brown/60 transition-all hover:border-calmo-red-brown/30 hover:bg-calmo-red-brown/5 hover:text-calmo-red-brown"
-            >
-              <Instagram className="h-4 w-4" strokeWidth={1.75} />
-            </a>
+            {contactLinks.map(({ href, label, icon: Icon, external }) => (
+              <a
+                key={label}
+                href={href}
+                {...(external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+                aria-label={label}
+                className={iconLinkClassName}
+              >
+                <Icon className="h-4 w-4" strokeWidth={1.75} />
+              </a>
+            ))}
           </div>
           <p className="mt-6 font-accent text-sm italic leading-relaxed text-calmo-burnt-brown/45">
             Calmo captures the warm moments created together.

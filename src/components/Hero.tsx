@@ -1,9 +1,12 @@
 import { Logo } from "@/components/Logo";
+import { sectionX } from "@/lib/section";
 import { ArrowDown } from "lucide-react";
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 pt-24 pb-20 sm:px-8">
+    <section
+      className={`relative flex min-h-screen flex-col items-center justify-center overflow-hidden ${sectionX} pt-24 pb-24 sm:pb-32`}
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-calmo-blue/25 blur-3xl sm:h-96 sm:w-96"
@@ -32,7 +35,7 @@ export function Hero() {
 
         <a
           href="#menu"
-          className="animate-fade-up-delay-3 mt-10 inline-flex items-center gap-2 rounded-full bg-calmo-burnt-brown px-8 py-3.5 font-body text-sm font-medium uppercase tracking-[0.14em] text-calmo-beige transition-all hover:bg-calmo-red-brown hover:shadow-lg hover:shadow-calmo-red-brown/15"
+          className="animate-fade-up-delay-3 mt-10 inline-flex items-center gap-2 rounded-full bg-calmo-burnt-brown px-8 py-3.5 font-body text-sm font-medium uppercase tracking-[0.14em] text-calmo-beige transition-all hover:bg-calmo-blue hover:text-calmo-burnt-brown hover:shadow-lg hover:shadow-calmo-blue/25"
         >
           View Menu
           <ArrowDown className="h-4 w-4" strokeWidth={1.75} />
