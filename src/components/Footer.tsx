@@ -18,9 +18,9 @@ export function Footer() {
             <p className="flex items-start gap-2.5 font-body text-sm leading-relaxed text-calmo-burnt-brown/75">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-calmo-red-brown" strokeWidth={1.75} />
               <span>
-                123 Calm Street
+                1227 Dundas St W
                 <br />
-                Toronto, ON M6K 1A1
+                Toronto, ON M6J 1X6
               </span>
             </p>
           </address>
