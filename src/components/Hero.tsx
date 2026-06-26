@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { sectionX } from "@/lib/section";
+import { venue } from "@/lib/venue";
+import { OpenStatus } from "@/components/OpenStatus";
 import { ArrowDown } from "lucide-react";
 
 export function Hero() {
@@ -34,8 +36,8 @@ export function Hero() {
         className={`relative z-10 flex h-full flex-col items-center justify-center ${sectionX} pt-24 pb-24 text-center sm:pb-32`}
       >
         <div className="mx-auto flex max-w-4xl flex-col items-center">
-          <p className="animate-fade-up mb-6 font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
-            Walk-ins only
+          <p className="animate-fade-up mb-6 font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown [text-shadow:0_1px_8px_rgba(50,27,15,0.45)]">
+            {venue.neighborhood} · Walk-ins only
           </p>
 
           <div className="animate-fade-up-delay-1">
@@ -51,20 +53,23 @@ export function Hero() {
           </div>
 
           <h1 className="animate-fade-up-delay-2 mt-8 max-w-2xl font-title1 text-3xl font-bold leading-tight tracking-tight text-calmo-beige sm:text-4xl md:text-5xl [text-shadow:0_2px_14px_rgba(50,27,15,0.65)]">
-            Calmo captures the warm moments created together.
+            Brunch & coffee, done calmly.
           </h1>
 
           <p className="animate-fade-up-delay-2 mt-4 max-w-md font-body text-sm leading-relaxed text-calmo-beige/80 sm:text-base [text-shadow:0_1px_10px_rgba(50,27,15,0.55)]">
             Simple food. Good coffee. No fuss.
           </p>
 
-          <a
-            href="#menu"
-            className="animate-fade-up-delay-3 mt-10 inline-flex items-center gap-2 rounded-full bg-calmo-beige px-8 py-3.5 font-body text-sm font-medium uppercase tracking-[0.14em] text-calmo-burnt-brown transition-all hover:bg-calmo-blue hover:text-calmo-burnt-brown hover:shadow-lg hover:shadow-calmo-blue/25"
-          >
-            View Menu
-            <ArrowDown className="h-4 w-4" strokeWidth={1.75} />
-          </a>
+          <div className="animate-fade-up-delay-3 mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            <OpenStatus />
+            <a
+              href="#menu"
+              className="inline-flex items-center gap-2 rounded-full bg-calmo-beige px-8 py-3.5 font-body text-sm font-medium uppercase tracking-[0.14em] text-calmo-burnt-brown transition-all hover:bg-calmo-blue hover:text-calmo-burnt-brown hover:shadow-lg hover:shadow-calmo-blue/25"
+            >
+              View Menu
+              <ArrowDown className="h-4 w-4" strokeWidth={1.75} />
+            </a>
+          </div>
         </div>
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2">

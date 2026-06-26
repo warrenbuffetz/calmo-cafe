@@ -2,19 +2,9 @@ import Image from "next/image";
 import { Clock, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { SketchField } from "@/components/SketchField";
 import { sectionShell } from "@/lib/section";
+import { venue } from "@/lib/venue";
 
-const hours = [
-  { days: "Mon – Thu", time: "7am – 4pm" },
-  { days: "Fri – Sat", time: "7am – 8pm" },
-  { days: "Sun", time: "8am – 4pm" },
-];
-
-const address = {
-  line1: "1227 Dundas St W",
-  line2: "Toronto, ON M6J 1X6",
-  mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=1227+Dundas+St+W,+Toronto,+ON+M6J+1X6",
-};
+const { hours, address } = venue;
 
 const contactLinks = [
   {

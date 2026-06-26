@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Coffee, Croissant, Sparkles } from "lucide-react";
 import { SketchField } from "@/components/SketchField";
 import { sectionShell } from "@/lib/section";
@@ -21,17 +22,27 @@ export function About() {
           },
         ]}
       />
-      <div className="relative z-10 mx-auto grid max-w-6xl gap-16 lg:grid-cols-[1fr_1.2fr] lg:gap-24 lg:items-center">
-        <div>
-          <p className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
-            The vibe
-          </p>
-          <h2 className="mt-4 font-title text-3xl font-bold leading-tight tracking-tight text-calmo-burnt-brown sm:text-4xl md:text-5xl">
-            Your neighborhood spot for the good stuff.
-          </h2>
+      <div className="relative z-10 mx-auto grid max-w-6xl gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+        <div className="relative aspect-square w-full overflow-hidden">
+          <Image
+            src="/about-cups.png"
+            alt="Calmo branded takeaway cups around a fresh latte"
+            fill
+            className="object-cover"
+            sizes="(min-width: 1024px) 45vw, 100vw"
+          />
         </div>
 
         <div className="space-y-6">
+          <div>
+            <p className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
+              The vibe
+            </p>
+            <h2 className="mt-4 font-title text-3xl font-bold leading-tight tracking-tight text-calmo-burnt-brown sm:text-4xl md:text-5xl">
+              Your neighborhood spot for the good stuff.
+            </h2>
+          </div>
+
           <p className="font-body text-base leading-relaxed text-calmo-burnt-brown/75 sm:text-lg">
             Calmo is where the retro diner counter meets the pastry case — fresh baked madeleines
             on one side, a perfectly crusted cheeseburger on the other. We&apos;re not trying to
