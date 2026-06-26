@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SketchField } from "@/components/SketchField";
 import { sectionShell } from "@/lib/section";
 
 const imageGap = "gap-5 lg:gap-6";
@@ -35,8 +36,24 @@ function GalleryClosingText({ className }: { className?: string }) {
 
 export function Gallery() {
   return (
-    <section id="gallery" className={`${sectionShell} bg-calmo-beige`}>
-      <div className="mx-auto max-w-6xl text-calmo-burnt-brown">
+    <section id="gallery" className={`${sectionShell} relative overflow-x-clip`}>
+      <SketchField
+        items={[
+          {
+            src: "/sketch-loops.png",
+            width: 844,
+            height: 1024,
+            className: "hidden lg:block -left-24 -bottom-24 w-[24rem] opacity-[0.07]",
+          },
+          {
+            src: "/sketch-brunch.png",
+            width: 733,
+            height: 1024,
+            className: "hidden lg:block -right-20 -bottom-20 w-[18rem] rotate-6 opacity-[0.06]",
+          },
+        ]}
+      />
+      <div className="relative z-10 mx-auto max-w-6xl text-calmo-burnt-brown">
         {/* Mobile: single-column stack */}
         <div className={`flex flex-col ${imageGap} md:hidden`}>
           <GalleryIntro />

@@ -1,4 +1,6 @@
+import Image from "next/image";
 import { Clock, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { SketchField } from "@/components/SketchField";
 import { sectionShell } from "@/lib/section";
 
 const hours = [
@@ -38,8 +40,29 @@ const iconLinkClassName =
 
 export function Footer() {
   return (
-    <footer id="visit" className={sectionShell}>
-      <div className="mx-auto grid max-w-6xl gap-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-16">
+    <footer id="visit" className={`${sectionShell} relative overflow-x-clip`}>
+      <SketchField
+        items={[
+          {
+            src: "/sketch-dish.png",
+            width: 1024,
+            height: 964,
+            className: "hidden lg:block right-[8%] -bottom-8 w-[12rem] rotate-6 opacity-[0.07]",
+          },
+        ]}
+      />
+      <div className="relative z-10 mx-auto grid max-w-6xl gap-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <Image
+            src="/footer-logo.png"
+            alt="Calmo - Brunch & Coffee"
+            width={1024}
+            height={1024}
+            unoptimized
+            className="h-auto w-44 lg:w-48"
+          />
+        </div>
+
         <div>
           <h2 className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
             Location
@@ -75,9 +98,9 @@ export function Footer() {
             {hours.map(({ days, time }) => (
               <li
                 key={days}
-                className="flex items-center justify-between gap-4 border-b border-calmo-burnt-brown/8 pb-3 font-body text-sm text-calmo-burnt-brown/75 last:border-0"
+                className="flex w-fit items-center gap-6 border-b border-calmo-burnt-brown/8 pb-3 font-body text-sm text-calmo-burnt-brown/75 last:border-0"
               >
-                <span className="flex items-center gap-2">
+                <span className="flex w-24 items-center gap-2">
                   <Clock className="h-3.5 w-3.5 text-calmo-burnt-brown/35" strokeWidth={1.75} />
                   {days}
                 </span>
@@ -87,7 +110,7 @@ export function Footer() {
           </ul>
         </div>
 
-        <div className="sm:col-span-2 lg:col-span-1">
+        <div>
           <h2 className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
             Contact
           </h2>
@@ -112,7 +135,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-16 max-w-6xl border-t border-calmo-burnt-brown/8 pt-8">
+      <div className="relative z-10 mx-auto mt-16 max-w-6xl border-t border-calmo-burnt-brown/8 pt-8">
         <p className="text-center font-body text-xs uppercase tracking-[0.2em] text-calmo-burnt-brown/35">
           © {new Date().getFullYear()} Calmo. All rights reserved.
         </p>

@@ -1,4 +1,5 @@
 import { MenuFullAccordion, MenuItemCard, type MenuItem } from "@/components/MenuFullAccordion";
+import { SketchField } from "@/components/SketchField";
 import { sectionShell } from "@/lib/section";
 
 const previewMenuItems: MenuItem[] = [
@@ -76,8 +77,36 @@ const extendedMenuItems: MenuItem[] = [
 
 export function MenuPreview() {
   return (
-    <section id="menu" className={`${sectionShell} bg-white/20`}>
-      <div className="mx-auto max-w-6xl">
+    <section id="menu" className={`${sectionShell} relative overflow-x-clip bg-white/20`}>
+      <SketchField
+        items={[
+          {
+            src: "/sketch-plate.png",
+            width: 741,
+            height: 1024,
+            className: "hidden lg:block -right-24 -bottom-24 w-[22rem] opacity-[0.20]",
+          },
+          {
+            src: "/sketch-dish.png",
+            width: 1024,
+            height: 964,
+            className: "hidden lg:block -left-16 top-16 w-[13rem] -rotate-6 opacity-[0.07]",
+          },
+          {
+            src: "/sketch-brunch.png",
+            width: 733,
+            height: 1024,
+            className: "hidden lg:block right-[6%] top-1/3 w-[11rem] rotate-6 opacity-[0.06]",
+          },
+          {
+            src: "/sketch-cup.png",
+            width: 910,
+            height: 1024,
+            className: "hidden lg:block -left-10 -bottom-16 w-[11rem] -rotate-6 opacity-[0.14]",
+          },
+        ]}
+      />
+      <div className="relative z-10 mx-auto max-w-6xl">
         <div className="mb-16 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">

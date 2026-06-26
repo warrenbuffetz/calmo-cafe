@@ -1,27 +1,32 @@
-import { Logo } from "@/components/Logo";
+import Image from "next/image";
 import { sectionX } from "@/lib/section";
 import { ArrowDown } from "lucide-react";
-
-const YOUTUBE_EMBED_SRC =
-  "https://www.youtube.com/embed/xqcC-QRgs78?autoplay=1&mute=1&loop=1&playlist=xqcC-QRgs78&controls=0&showinfo=0&disablekb=1";
 
 export function Hero() {
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* Video layer */}
-      <div className="absolute inset-0">
-        <iframe
-          src={YOUTUBE_EMBED_SRC}
-          title="Calmo cafe ambience"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          className="pointer-events-none absolute top-1/2 left-1/2 h-[150vh] w-[150vw] max-w-none -translate-x-1/2 -translate-y-1/2 border-0"
+      {/* Storefront illustration */}
+      <div className="absolute inset-0 overflow-hidden">
+        <Image
+          src="/hero-storefront.png"
+          alt=""
+          aria-hidden
+          fill
+          priority
+          unoptimized
+          className="scale-100 object-cover blur-[4px] md:blur-[6px]"
         />
       </div>
 
-      {/* Gradient overlay */}
+      {/* Center scrim: contrast behind the text */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-b from-calmo-beige to-calmo-burnt-brown opacity-80"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_62%_60%_at_50%_46%,rgba(50,27,15,0.32),transparent_72%)]"
+      />
+      {/* Soft edge vignette */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(50,27,15,0.24))]"
       />
 
       {/* Foreground content */}
@@ -33,15 +38,23 @@ export function Hero() {
             Walk-ins only
           </p>
 
-          <div className="animate-fade-up-delay-1 text-calmo-beige">
-            <Logo size="lg" className="mx-auto" />
+          <div className="animate-fade-up-delay-1">
+            <Image
+              src="/hero-badge.png"
+              alt="Calmo"
+              width={1024}
+              height={962}
+              priority
+              unoptimized
+              className="mx-auto h-auto w-56 sm:w-64 md:w-72"
+            />
           </div>
 
-          <h1 className="animate-fade-up-delay-2 mt-8 max-w-2xl font-title1 text-3xl font-bold leading-tight tracking-tight text-calmo-beige sm:text-4xl md:text-5xl">
+          <h1 className="animate-fade-up-delay-2 mt-8 max-w-2xl font-title1 text-3xl font-bold leading-tight tracking-tight text-calmo-beige sm:text-4xl md:text-5xl [text-shadow:0_2px_14px_rgba(50,27,15,0.65)]">
             Calmo captures the warm moments created together.
           </h1>
 
-          <p className="animate-fade-up-delay-2 mt-4 max-w-md font-body text-sm leading-relaxed text-calmo-beige/80 sm:text-base">
+          <p className="animate-fade-up-delay-2 mt-4 max-w-md font-body text-sm leading-relaxed text-calmo-beige/80 sm:text-base [text-shadow:0_1px_10px_rgba(50,27,15,0.55)]">
             Simple food. Good coffee. No fuss.
           </p>
 

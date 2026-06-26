@@ -1,10 +1,27 @@
 import { Coffee, Croissant, Sparkles } from "lucide-react";
+import { SketchField } from "@/components/SketchField";
 import { sectionShell } from "@/lib/section";
 
 export function About() {
   return (
-    <section id="about" className={sectionShell}>
-      <div className="mx-auto grid max-w-6xl gap-16 lg:grid-cols-[1fr_1.2fr] lg:gap-24 lg:items-center">
+    <section id="about" className={`${sectionShell} relative overflow-x-clip`}>
+      <SketchField
+        items={[
+          {
+            src: "/sketch-people.png",
+            width: 1024,
+            height: 1003,
+            className: "hidden lg:block -left-32 -bottom-28 w-[30rem] opacity-[0.048]",
+          },
+          {
+            src: "/sketch-plant.png",
+            width: 879,
+            height: 1024,
+            className: "hidden lg:block right-4 top-6 w-[12rem] rotate-3 opacity-[0.084]",
+          },
+        ]}
+      />
+      <div className="relative z-10 mx-auto grid max-w-6xl gap-16 lg:grid-cols-[1fr_1.2fr] lg:gap-24 lg:items-center">
         <div>
           <p className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
             The vibe
