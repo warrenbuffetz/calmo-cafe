@@ -57,7 +57,23 @@ export function Footer() {
           <h2 className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
             Location
           </h2>
-          <address className="mt-4 not-italic">
+          <a
+            href={address.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open Calmo on Google Maps"
+            className="mt-3 block w-full max-w-[13.5rem] transition-opacity hover:opacity-85"
+          >
+            <Image
+              src="/footer-map.png"
+              alt="Hand-drawn map of Calmo at Dundas St W and Grove Ave"
+              width={1024}
+              height={768}
+              unoptimized
+              className="h-auto w-full"
+            />
+          </a>
+          <address className="mt-3 not-italic">
             <a
               href={address.mapsUrl}
               target="_blank"

@@ -16,7 +16,7 @@ export function Hero() {
           fill
           priority
           unoptimized
-          className="scale-100 object-cover blur-[4px] md:blur-[6px]"
+          className="origin-top scale-[1.08] object-cover object-[center_38%] blur-[4px] md:blur-[6px]"
         />
       </div>
 
