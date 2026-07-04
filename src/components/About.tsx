@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Coffee, Sparkles, UtensilsCrossed } from "lucide-react";
 import { sectionShell } from "@/lib/section";
 
 const pillars = [
@@ -68,22 +67,6 @@ export function About() {
             </div>
           ))}
         </div>
-
-        <ul className="mt-14 flex flex-wrap justify-center gap-3">
-          {[
-            { icon: UtensilsCrossed, label: "Brunch plates" },
-            { icon: Coffee, label: "Perfect coffee" },
-            { icon: Sparkles, label: "No fuss" },
-          ].map(({ icon: Icon, label }) => (
-            <li
-              key={label}
-              className="inline-flex items-center gap-2 rounded-full border border-calmo-burnt-brown/12 bg-white/30 px-4 py-2 font-body text-xs font-medium uppercase tracking-[0.12em] text-calmo-burnt-brown/70 transition-colors hover:border-calmo-blue hover:bg-calmo-blue/20 hover:text-calmo-burnt-brown"
-            >
-              <Icon className="h-3.5 w-3.5 text-calmo-red-brown" strokeWidth={1.75} />
-              {label}
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );
