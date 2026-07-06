@@ -56,3 +56,27 @@ export type ReservationCounts = {
   pending: number;
   confirmed: number;
 };
+
+export const RESERVATION_ACTOR_TYPES = ["staff", "customer", "system"] as const;
+export type ReservationActorType = (typeof RESERVATION_ACTOR_TYPES)[number];
+
+export const RESERVATION_EVENT_ACTIONS = [
+  "created",
+  "confirm",
+  "cancel",
+  "complete",
+  "no_show",
+  "customer_cancel",
+] as const;
+export type ReservationEventAction = (typeof RESERVATION_EVENT_ACTIONS)[number];
+
+export type ReservationEvent = {
+  id: string;
+  reservation_id: string;
+  action: ReservationEventAction;
+  from_status: ReservationStatus | null;
+  to_status: ReservationStatus;
+  actor_type: ReservationActorType;
+  actor_id: string | null;
+  created_at: string;
+};

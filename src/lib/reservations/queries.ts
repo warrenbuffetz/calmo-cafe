@@ -8,6 +8,8 @@ import type {
   ReservationStatus,
 } from "@/lib/reservations/types";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { logReservationEvent } from "@/lib/reservations/events";
+import type { ReservationEventAction } from "@/lib/reservations/types";
 
 export async function createReservation(
   input: CreateReservationInput,
@@ -31,7 +33,17 @@ export async function createReservation(
     throw new Error(error.message);
   }
 
-  return normalizeReservation(data);
+  const reservation = normalizeReservation(data);
+
+  await logReservationEvent({
+    reservationId: reservation.id,
+    action: "created",
+    fromStatus: null,
+    toStatus: "pending",
+    actorType: "customer",
+  });
+
+  return reservation;
 }
 
 export async function getReservationByToken(token: string): Promise<Reservation | null> {
@@ -123,7 +135,27 @@ export async function getReservationCounts(): Promise<ReservationCounts> {
 export async function updateReservationStatus(
   id: string,
   status: ReservationStatus,
+  event?: {
+    action: ReservationEventAction;
+    actorType: "staff" | "customer";
+    actorId?: string | null;
+  },
 ): Promise<Reservation> {
+  const { data: existing, error: fetchError } = await supabaseAdmin
+    .from("reservations")
+    .select("status")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (fetchError) {
+    throw new Error(fetchError.message);
+  }
+
+  if (!existing) {
+    throw new Error("Reservation not found.");
+  }
+
+  const fromStatus = existing.status as ReservationStatus;
   const now = new Date().toISOString();
 
   const patch: Record<string, string> = { status };
@@ -150,7 +182,20 @@ export async function updateReservationStatus(
     throw new Error(error.message);
   }
 
-  return normalizeReservation(data);
+  const reservation = normalizeReservation(data);
+
+  if (event) {
+    await logReservationEvent({
+      reservationId: reservation.id,
+      action: event.action,
+      fromStatus,
+      toStatus: status,
+      actorType: event.actorType,
+      actorId: event.actorId,
+    });
+  }
+
+  return reservation;
 }
 
 function normalizeReservation(row: Record<string, unknown>): Reservation {
@@ -190,7 +235,10 @@ export async function cancelReservationByToken(token: string): Promise<Reservati
     return reservation;
   }
 
-  return updateReservationStatus(reservation.id, "cancelled_by_customer");
+  return updateReservationStatus(reservation.id, "cancelled_by_customer", {
+    action: "customer_cancel",
+    actorType: "customer",
+  });
 }
 
 export function canTransitionTo(
