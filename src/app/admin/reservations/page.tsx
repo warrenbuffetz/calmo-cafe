@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SiteChrome } from "@/components/SiteChrome";
 import { AdminReservationTable } from "@/components/admin/AdminReservationTable";
-import { sectionShell } from "@/lib/section";
+import { sectionContent } from "@/lib/section";
 
 export const metadata: Metadata = {
   title: "Reservations admin — Calmo",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function AdminReservationsPage() {
   return (
     <SiteChrome>
-      <section className={sectionShell}>
+      <section className={sectionContent}>
         <div className="mx-auto max-w-4xl">
           <p className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
             Staff
@@ -20,7 +20,7 @@ export default function AdminReservationsPage() {
             Reservations
           </h1>
           <p className="mt-4 font-body text-sm text-calmo-burnt-brown/70">
-            Review requests, confirm bookings, and update status.
+            Pending requests appear first. Filter by date or search for a guest when needed.
           </p>
           <div className="mt-10">
             <AdminReservationTable />

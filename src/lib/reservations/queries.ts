@@ -1,7 +1,12 @@
 import "server-only";
 
 import type { CreateReservationInput } from "@/lib/reservations/schema";
-import type { Reservation, ReservationStatus } from "@/lib/reservations/types";
+import type {
+  AdminStatusTab,
+  Reservation,
+  ReservationCounts,
+  ReservationStatus,
+} from "@/lib/reservations/types";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export async function createReservation(
@@ -45,18 +50,40 @@ export async function getReservationByToken(token: string): Promise<Reservation 
 
 export async function listReservations(filters: {
   date?: string;
-  status?: ReservationStatus;
+  status?: AdminStatusTab;
+  q?: string;
+  sort?: "upcoming" | "recent";
 }): Promise<Reservation[]> {
-  let query = supabaseAdmin.from("reservations").select().order("reservation_time", {
-    ascending: true,
-  });
+  const ascending = filters.sort !== "recent";
+
+  let query = supabaseAdmin
+    .from("reservations")
+    .select()
+    .order("reservation_date", { ascending })
+    .order("reservation_time", { ascending })
+    .limit(100);
 
   if (filters.date) {
     query = query.eq("reservation_date", filters.date);
   }
 
-  if (filters.status) {
-    query = query.eq("status", filters.status);
+  if (filters.status && filters.status !== "all") {
+    if (filters.status === "cancelled") {
+      query = query.in("status", ["cancelled_by_customer", "cancelled_by_restaurant"]);
+    } else if (filters.status === "past") {
+      query = query.in("status", ["completed", "no_show"]);
+    } else {
+      query = query.eq("status", filters.status);
+    }
+  }
+
+  const search = filters.q?.trim();
+  if (search) {
+    const escaped = search.replace(/[%_]/g, "");
+    const pattern = `%${escaped}%`;
+    query = query.or(
+      `customer_name.ilike.${pattern},customer_email.ilike.${pattern},customer_phone.ilike.${pattern}`,
+    );
   }
 
   const { data, error } = await query;
@@ -66,6 +93,31 @@ export async function listReservations(filters: {
   }
 
   return (data ?? []).map(normalizeReservation);
+}
+
+export async function getReservationCounts(): Promise<ReservationCounts> {
+  const [pendingResult, confirmedResult] = await Promise.all([
+    supabaseAdmin
+      .from("reservations")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "pending"),
+    supabaseAdmin
+      .from("reservations")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "confirmed"),
+  ]);
+
+  if (pendingResult.error) {
+    throw new Error(pendingResult.error.message);
+  }
+  if (confirmedResult.error) {
+    throw new Error(confirmedResult.error.message);
+  }
+
+  return {
+    pending: pendingResult.count ?? 0,
+    confirmed: confirmedResult.count ?? 0,
+  };
 }
 
 export async function updateReservationStatus(

@@ -80,3 +80,22 @@ export function formatReservationTime(time: string): string {
     minute: "2-digit",
   });
 }
+
+export function formatReservationDateShort(dateStr: string): string {
+  const date = new Date(`${dateStr}T12:00:00`);
+  return date.toLocaleDateString("en-CA", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+export function formatRequestedAt(iso: string): string {
+  const date = new Date(iso);
+  return date.toLocaleDateString("en-CA", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}

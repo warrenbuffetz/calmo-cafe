@@ -41,3 +41,18 @@ export const CANCELLED_STATUSES: ReservationStatus[] = [
   "cancelled_by_customer",
   "cancelled_by_restaurant",
 ];
+
+export type AdminStatusTab = "pending" | "confirmed" | "cancelled" | "past" | "all";
+
+export const ADMIN_STATUS_TABS: { id: AdminStatusTab; label: string }[] = [
+  { id: "pending", label: "Pending" },
+  { id: "confirmed", label: "Confirmed" },
+  { id: "cancelled", label: "Cancelled" },
+  { id: "past", label: "Past" },
+  { id: "all", label: "All" },
+];
+
+export type ReservationCounts = {
+  pending: number;
+  confirmed: number;
+};
