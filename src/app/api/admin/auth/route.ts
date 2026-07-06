@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { adminPinSchema } from "@/lib/reservations/schema";
-import { setAdminSessionCookie } from "@/lib/auth/admin";
-import { verifyAdminPin } from "@/lib/auth/admin";
+import { clearAdminSessionCookie, setAdminSessionCookie, verifyAdminPin } from "@/lib/auth/admin";
 
 export async function POST(request: Request) {
   try {
@@ -22,5 +21,15 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("[admin/auth] POST failed:", error);
     return NextResponse.json({ error: "Unable to sign in." }, { status: 500 });
+  }
+}
+
+export async function DELETE() {
+  try {
+    await clearAdminSessionCookie();
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("[admin/auth] DELETE failed:", error);
+    return NextResponse.json({ error: "Unable to sign out." }, { status: 500 });
   }
 }

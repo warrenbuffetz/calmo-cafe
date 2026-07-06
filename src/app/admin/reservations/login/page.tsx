@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { SiteChrome } from "@/components/SiteChrome";
 import { AdminLoginForm } from "@/components/admin/AdminLoginForm";
-import { sectionShell } from "@/lib/section";
+import { sectionContent } from "@/lib/section";
 
 export const metadata: Metadata = {
   title: "Admin login — Calmo",
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function AdminLoginPage() {
   return (
     <SiteChrome>
-      <section className={sectionShell}>
+      <section className={sectionContent}>
         <div className="mx-auto max-w-sm">
           <h1 className="font-title text-3xl font-bold text-calmo-burnt-brown">Staff login</h1>
           <p className="mt-3 font-body text-sm text-calmo-burnt-brown/70">
