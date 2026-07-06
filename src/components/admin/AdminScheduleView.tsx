@@ -1,9 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AdminReservationActions } from "@/components/admin/AdminReservationActions";
 import { statusBadgeStyles } from "@/components/admin/reservation-styles";
 import { useReservationAction } from "@/components/admin/useReservationAction";
+import {
+  getScheduleSummary,
+  getScheduleSummaryParts,
+} from "@/lib/reservations/schedule-summary";
 import {
   formatReservationDate,
   formatReservationDateShort,
@@ -25,6 +29,107 @@ function groupByTime(reservations: Reservation[]): Map<string, Reservation[]> {
   }
 
   return groups;
+}
+
+function ScheduleSummaryHeader({ reservations }: { reservations: Reservation[] }) {
+  const summary = useMemo(() => getScheduleSummary(reservations), [reservations]);
+  const parts = useMemo(() => getScheduleSummaryParts(summary), [summary]);
+
+  return (
+    <div>
+      <p className="font-title text-lg font-bold text-calmo-burnt-brown">
+        {parts.map((part, index) => (
+          <span key={`${part.text}-${index}`}>
+            {index > 0 ? (
+              <span className="font-body font-normal text-calmo-burnt-brown/40"> · </span>
+            ) : null}
+            <span
+              className={cn(
+                part.variant === "pending" ? "text-calmo-red-brown" : undefined,
+                part.text === "this week" ? "font-body text-sm font-normal text-calmo-burnt-brown/60" : undefined,
+              )}
+            >
+              {part.text}
+            </span>
+          </span>
+        ))}
+      </p>
+      <p className="mt-2 font-body text-sm text-calmo-burnt-brown/60">
+        Tap a day to view reservations. Tap a guest for details.
+      </p>
+    </div>
+  );
+}
+
+function ScheduleDayStrip({
+  weekDates,
+  today,
+  selectedDate,
+  reservationsByDate,
+  onSelectDate,
+}: {
+  weekDates: string[];
+  today: string;
+  selectedDate: string;
+  reservationsByDate: Map<string, Reservation[]>;
+  onSelectDate: (date: string) => void;
+}) {
+  const dayRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+
+  useEffect(() => {
+    const button = dayRefs.current.get(selectedDate);
+    button?.scrollIntoView({ inline: "center", behavior: "smooth", block: "nearest" });
+  }, [selectedDate]);
+
+  return (
+    <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 snap-x snap-mandatory scroll-smooth">
+      {weekDates.map((date) => {
+        const count = reservationsByDate.get(date)?.length ?? 0;
+        const isToday = date === today;
+        const isSelected = date === selectedDate;
+
+        return (
+          <button
+            key={date}
+            ref={(node) => {
+              if (node) {
+                dayRefs.current.set(date, node);
+              } else {
+                dayRefs.current.delete(date);
+              }
+            }}
+            type="button"
+            onClick={() => onSelectDate(date)}
+            className={cn(
+              "flex w-[4.5rem] shrink-0 snap-center flex-col items-center rounded-2xl border px-2 py-3 transition-all",
+              isSelected
+                ? "border-calmo-burnt-brown/30 bg-calmo-burnt-brown text-calmo-beige"
+                : "border-calmo-burnt-brown/10 bg-calmo-beige/60 text-calmo-burnt-brown hover:border-calmo-burnt-brown/20",
+            )}
+          >
+            <span className="font-body text-[10px] font-medium uppercase tracking-[0.12em]">
+              {isToday ? "Today" : formatReservationDateShort(date).split(" ")[0]}
+            </span>
+            <span className="mt-1 font-title text-lg font-bold">
+              {new Date(`${date}T12:00:00`).getDate()}
+            </span>
+            {count > 0 ? (
+              <span
+                className={cn(
+                  "mt-1 inline-flex min-w-[1.25rem] items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
+                  isSelected ? "bg-calmo-beige/20 text-calmo-beige" : "bg-calmo-blue/40",
+                )}
+              >
+                {count}
+              </span>
+            ) : (
+              <span className="mt-1 h-5" />
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 function ScheduleReservationCard({
@@ -93,45 +198,34 @@ function DayScheduleSection({
   isToday,
   actionLoadingId,
   onAction,
-  showHeading = true,
 }: {
   date: string;
   reservations: Reservation[];
   isToday: boolean;
   actionLoadingId: string | null;
   onAction: (id: string, action: "confirm" | "cancel" | "complete" | "no_show") => void;
-  showHeading?: boolean;
 }) {
   const timeGroups = groupByTime(reservations);
   const sortedTimes = [...timeGroups.keys()].sort();
 
   return (
     <section>
-      {showHeading ? (
-        <h3
-          className={cn(
-            "font-title text-lg font-bold",
-            isToday ? "text-calmo-burnt-brown" : "text-calmo-burnt-brown/80",
-          )}
-        >
-          {isToday ? "Today" : formatReservationDateShort(date)}
-          <span className="ml-2 font-body text-sm font-normal text-calmo-burnt-brown/50">
-            {formatReservationDate(date).split(",").slice(1).join(",").trim()}
-          </span>
-        </h3>
-      ) : null}
+      <h3
+        className={cn(
+          "font-title text-lg font-bold",
+          isToday ? "text-calmo-burnt-brown" : "text-calmo-burnt-brown/80",
+        )}
+      >
+        {isToday ? "Today" : formatReservationDateShort(date)}
+        <span className="ml-2 font-body text-sm font-normal text-calmo-burnt-brown/50">
+          {formatReservationDate(date).split(",").slice(1).join(",").trim()}
+        </span>
+      </h3>
 
       {reservations.length === 0 ? (
-        <p
-          className={cn(
-            "font-body text-sm text-calmo-burnt-brown/50",
-            showHeading ? "mt-3" : "",
-          )}
-        >
-          Nothing booked.
-        </p>
+        <p className="mt-3 font-body text-sm text-calmo-burnt-brown/50">Nothing booked.</p>
       ) : (
-        <div className={cn("space-y-5", showHeading ? "mt-4" : "")}>
+        <div className="mt-4 space-y-5">
           {sortedTimes.map((time) => (
             <div key={time}>
               <p className="font-body text-xs font-medium uppercase tracking-[0.16em] text-calmo-red-brown">
@@ -217,50 +311,15 @@ export function AdminScheduleView() {
 
   return (
     <div className="space-y-6">
-      <p className="font-body text-sm text-calmo-burnt-brown/60">
-        Pending and confirmed reservations for the next 7 days. Tap a guest to expand details.
-      </p>
+      {!loading ? <ScheduleSummaryHeader reservations={reservations} /> : null}
 
-      <div className="hidden gap-2 sm:grid sm:grid-cols-7">
-        {weekDates.map((date) => {
-          const count = reservationsByDate.get(date)?.length ?? 0;
-          const isToday = date === today;
-          const isSelected = date === selectedDate;
-
-          return (
-            <button
-              key={date}
-              type="button"
-              onClick={() => setSelectedDate(date)}
-              className={cn(
-                "flex flex-col items-center rounded-2xl border px-2 py-3 transition-all",
-                isSelected
-                  ? "border-calmo-burnt-brown/30 bg-calmo-burnt-brown text-calmo-beige"
-                  : "border-calmo-burnt-brown/10 bg-calmo-beige/60 text-calmo-burnt-brown hover:border-calmo-burnt-brown/20",
-              )}
-            >
-              <span className="font-body text-[10px] font-medium uppercase tracking-[0.12em]">
-                {isToday ? "Today" : formatReservationDateShort(date).split(" ")[0]}
-              </span>
-              <span className="mt-1 font-title text-lg font-bold">
-                {new Date(`${date}T12:00:00`).getDate()}
-              </span>
-              {count > 0 ? (
-                <span
-                  className={cn(
-                    "mt-1 inline-flex min-w-[1.25rem] items-center justify-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
-                    isSelected ? "bg-calmo-beige/20 text-calmo-beige" : "bg-calmo-blue/40",
-                  )}
-                >
-                  {count}
-                </span>
-              ) : (
-                <span className="mt-1 h-5" />
-              )}
-            </button>
-          );
-        })}
-      </div>
+      <ScheduleDayStrip
+        weekDates={weekDates}
+        today={today}
+        selectedDate={selectedDate}
+        reservationsByDate={reservationsByDate}
+        onSelectDate={setSelectedDate}
+      />
 
       {error ? (
         <p className="rounded-2xl border border-calmo-red-brown/20 bg-calmo-red-brown/5 px-4 py-3 font-body text-sm text-calmo-red-brown">
@@ -271,32 +330,13 @@ export function AdminScheduleView() {
       {loading ? (
         <p className="font-body text-sm text-calmo-burnt-brown/60">Loading schedule...</p>
       ) : (
-        <>
-          <div className="hidden sm:block">
-            <DayScheduleSection
-              date={selectedDate}
-              reservations={selectedReservations}
-              isToday={selectedDate === today}
-              actionLoadingId={actionLoadingId}
-              onAction={runAction}
-              showHeading
-            />
-          </div>
-
-          <div className="space-y-8 sm:hidden">
-            {weekDates.map((date) => (
-              <DayScheduleSection
-                key={date}
-                date={date}
-                reservations={reservationsByDate.get(date) ?? []}
-                isToday={date === today}
-                actionLoadingId={actionLoadingId}
-                onAction={runAction}
-                showHeading
-              />
-            ))}
-          </div>
-        </>
+        <DayScheduleSection
+          date={selectedDate}
+          reservations={selectedReservations}
+          isToday={selectedDate === today}
+          actionLoadingId={actionLoadingId}
+          onAction={runAction}
+        />
       )}
     </div>
   );
