@@ -53,7 +53,7 @@ export function Hero() {
           </div>
 
           <h1 className="animate-fade-up-delay-2 mt-8 max-w-2xl font-title1 text-3xl font-bold leading-tight tracking-tight text-calmo-beige sm:text-4xl md:text-5xl [text-shadow:0_2px_14px_rgba(50,27,15,0.65)]">
-            Brunch & coffee, done calmly.
+            Brunch & coffee
           </h1>
 
           <p className="animate-fade-up-delay-2 mt-4 max-w-md font-body text-sm leading-relaxed text-calmo-beige/80 sm:text-base [text-shadow:0_1px_10px_rgba(50,27,15,0.55)]">
