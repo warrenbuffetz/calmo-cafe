@@ -60,12 +60,18 @@ export type ReservationCounts = {
 export const RESERVATION_ACTOR_TYPES = ["staff", "customer", "system"] as const;
 export type ReservationActorType = (typeof RESERVATION_ACTOR_TYPES)[number];
 
-export const RESERVATION_EVENT_ACTIONS = [
-  "created",
+export const STAFF_RESERVATION_EVENT_ACTIONS = [
   "confirm",
   "cancel",
   "complete",
   "no_show",
+] as const;
+export type StaffReservationEventAction = (typeof STAFF_RESERVATION_EVENT_ACTIONS)[number];
+
+/** @deprecated Customer events are not logged; kept for existing DB enum values */
+export const RESERVATION_EVENT_ACTIONS = [
+  ...STAFF_RESERVATION_EVENT_ACTIONS,
+  "created",
   "customer_cancel",
 ] as const;
 export type ReservationEventAction = (typeof RESERVATION_EVENT_ACTIONS)[number];
@@ -73,10 +79,10 @@ export type ReservationEventAction = (typeof RESERVATION_EVENT_ACTIONS)[number];
 export type ReservationEvent = {
   id: string;
   reservation_id: string;
-  action: ReservationEventAction;
+  action: StaffReservationEventAction;
   from_status: ReservationStatus | null;
   to_status: ReservationStatus;
-  actor_type: ReservationActorType;
+  actor_type: "staff";
   actor_id: string | null;
   created_at: string;
 };

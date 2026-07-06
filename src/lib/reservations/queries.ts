@@ -9,7 +9,7 @@ import type {
 } from "@/lib/reservations/types";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { logReservationEvent } from "@/lib/reservations/events";
-import type { ReservationEventAction } from "@/lib/reservations/types";
+import type { StaffReservationEventAction } from "@/lib/reservations/types";
 
 export async function createReservation(
   input: CreateReservationInput,
@@ -33,17 +33,7 @@ export async function createReservation(
     throw new Error(error.message);
   }
 
-  const reservation = normalizeReservation(data);
-
-  await logReservationEvent({
-    reservationId: reservation.id,
-    action: "created",
-    fromStatus: null,
-    toStatus: "pending",
-    actorType: "customer",
-  });
-
-  return reservation;
+  return normalizeReservation(data);
 }
 
 export async function getReservationByToken(token: string): Promise<Reservation | null> {
@@ -136,8 +126,7 @@ export async function updateReservationStatus(
   id: string,
   status: ReservationStatus,
   event?: {
-    action: ReservationEventAction;
-    actorType: "staff" | "customer";
+    action: StaffReservationEventAction;
     actorId?: string | null;
   },
 ): Promise<Reservation> {
@@ -190,7 +179,6 @@ export async function updateReservationStatus(
       action: event.action,
       fromStatus,
       toStatus: status,
-      actorType: event.actorType,
       actorId: event.actorId,
     });
   }
@@ -235,10 +223,7 @@ export async function cancelReservationByToken(token: string): Promise<Reservati
     return reservation;
   }
 
-  return updateReservationStatus(reservation.id, "cancelled_by_customer", {
-    action: "customer_cancel",
-    actorType: "customer",
-  });
+  return updateReservationStatus(reservation.id, "cancelled_by_customer");
 }
 
 export function canTransitionTo(

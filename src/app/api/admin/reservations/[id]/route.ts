@@ -57,7 +57,6 @@ export async function PATCH(request: Request, context: RouteContext) {
     const newStatus = actionToStatus(parsed.data.action);
     const reservation = await updateReservationStatus(id, newStatus, {
       action: parsed.data.action,
-      actorType: "staff",
       actorId: "shared_pin",
     });
 

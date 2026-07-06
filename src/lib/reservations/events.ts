@@ -1,28 +1,27 @@
 import "server-only";
 
 import type {
-  ReservationActorType,
-  ReservationEventAction,
   ReservationStatus,
+  StaffReservationEventAction,
 } from "@/lib/reservations/types";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export type LogReservationEventInput = {
   reservationId: string;
-  action: ReservationEventAction;
+  action: StaffReservationEventAction;
   fromStatus: ReservationStatus | null;
   toStatus: ReservationStatus;
-  actorType: ReservationActorType;
   actorId?: string | null;
 };
 
+/** Staff-only audit log. Guest requests and cancellations live on reservations. */
 export async function logReservationEvent(input: LogReservationEventInput): Promise<void> {
   const { error } = await supabaseAdmin.from("reservation_events").insert({
     reservation_id: input.reservationId,
     action: input.action,
     from_status: input.fromStatus,
     to_status: input.toStatus,
-    actor_type: input.actorType,
+    actor_type: "staff",
     actor_id: input.actorId ?? null,
   });
 

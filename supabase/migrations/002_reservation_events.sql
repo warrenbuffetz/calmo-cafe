@@ -1,4 +1,5 @@
--- reservation_events audit log
+-- reservation_events audit log (staff actions only)
+-- Guest requests and cancellations are tracked on reservations.
 -- Uses text for status columns so this works even if reservations.status
 -- was created as text instead of the reservation_status enum from 001.
 
