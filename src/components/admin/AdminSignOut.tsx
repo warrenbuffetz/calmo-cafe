@@ -15,7 +15,7 @@ export function AdminSignOut() {
 
     try {
       await fetch("/api/admin/auth", { method: "DELETE" });
-      router.push("/admin/reservations/login");
+      router.push("/reservations/admin/login");
       router.refresh();
     } catch {
       setSigningOut(false);

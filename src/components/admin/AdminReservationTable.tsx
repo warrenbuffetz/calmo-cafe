@@ -1,13 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { AdminReservationActions } from "@/components/admin/AdminReservationActions";
+import { statusBadgeStyles } from "@/components/admin/reservation-styles";
+import { useReservationAction } from "@/components/admin/useReservationAction";
 import { FormField, Input } from "@/components/ui/FormField";
 import {
   formatRequestedAt,
   formatReservationDate,
   formatReservationDateShort,
   formatReservationTime,
+  getMinBookingDate,
 } from "@/lib/reservations/time-slots";
 import {
   ADMIN_STATUS_TABS,
@@ -17,15 +20,6 @@ import {
   type ReservationCounts,
 } from "@/lib/reservations/types";
 import { cn } from "@/lib/utils";
-
-const statusBadgeStyles = {
-  pending: "bg-calmo-blue/35 text-calmo-burnt-brown",
-  confirmed: "bg-calmo-blue/50 text-calmo-burnt-brown",
-  cancelled_by_customer: "bg-calmo-red-brown/12 text-calmo-red-brown",
-  cancelled_by_restaurant: "bg-calmo-red-brown/12 text-calmo-red-brown",
-  completed: "bg-calmo-burnt-brown/10 text-calmo-burnt-brown",
-  no_show: "bg-calmo-burnt-brown/10 text-calmo-burnt-brown",
-} as const;
 
 function getEmptyMessage(
   statusTab: AdminStatusTab,
@@ -46,8 +40,7 @@ export function AdminReservationTable() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [counts, setCounts] = useState<ReservationCounts>({ pending: 0, confirmed: 0 });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setDebouncedSearch(searchQuery.trim()), 300);
@@ -56,7 +49,7 @@ export function AdminReservationTable() {
 
   const loadReservations = useCallback(async () => {
     setLoading(true);
-    setError(null);
+    setFetchError(null);
 
     try {
       const params = new URLSearchParams({ status: statusTab });
@@ -68,7 +61,7 @@ export function AdminReservationTable() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.error ?? "Unable to load reservations.");
+        setFetchError(data.error ?? "Unable to load reservations.");
         setReservations([]);
         return;
       }
@@ -76,44 +69,22 @@ export function AdminReservationTable() {
       setReservations(data.reservations ?? []);
       setCounts(data.counts ?? { pending: 0, confirmed: 0 });
     } catch {
-      setError("Unable to load reservations.");
+      setFetchError("Unable to load reservations.");
       setReservations([]);
     } finally {
       setLoading(false);
     }
   }, [statusTab, dateFilter, debouncedSearch]);
 
+  const { actionLoadingId, error: actionError, runAction } = useReservationAction(loadReservations);
+  const error = fetchError ?? actionError;
+
   useEffect(() => {
     void loadReservations();
   }, [loadReservations]);
 
-  const runAction = async (id: string, action: "confirm" | "cancel" | "complete" | "no_show") => {
-    setActionLoadingId(id);
-    setError(null);
-
-    try {
-      const response = await fetch(`/api/admin/reservations/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error ?? "Action failed.");
-        return;
-      }
-
-      await loadReservations();
-    } catch {
-      setError("Action failed.");
-    } finally {
-      setActionLoadingId(null);
-    }
-  };
-
   const showDateOnCards = !dateFilter;
+  const today = getMinBookingDate();
 
   return (
     <div className="space-y-6">
@@ -152,12 +123,22 @@ export function AdminReservationTable() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <FormField label="Filter by date" htmlFor="admin-date">
-          <Input
-            id="admin-date"
-            type="date"
-            value={dateFilter}
-            onChange={(e) => setDateFilter(e.target.value)}
-          />
+          <div className="flex flex-wrap items-center gap-2">
+            <Input
+              id="admin-date"
+              type="date"
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
+              className="min-w-0 flex-1"
+            />
+            <button
+              type="button"
+              onClick={() => setDateFilter(today)}
+              className="shrink-0 rounded-full border border-calmo-burnt-brown/15 bg-calmo-beige/60 px-3 py-2 font-body text-xs font-medium text-calmo-burnt-brown hover:bg-calmo-blue/25"
+            >
+              Today
+            </button>
+          </div>
           <p className="mt-2 font-body text-xs text-calmo-burnt-brown/50">
             Leave empty to see all dates.
           </p>
@@ -255,47 +236,12 @@ export function AdminReservationTable() {
                 ) : null}
               </div>
 
-              <div className="mt-5 flex flex-wrap gap-2">
-                {reservation.status === "pending" ? (
-                  <Button
-                    variant="dark"
-                    className="px-5 py-2.5 text-[11px]"
-                    disabled={actionLoadingId === reservation.id}
-                    onClick={() => runAction(reservation.id, "confirm")}
-                  >
-                    Confirm
-                  </Button>
-                ) : null}
-                {reservation.status === "pending" || reservation.status === "confirmed" ? (
-                  <Button
-                    variant="secondary"
-                    className="px-5 py-2.5 text-[11px]"
-                    disabled={actionLoadingId === reservation.id}
-                    onClick={() => runAction(reservation.id, "cancel")}
-                  >
-                    Cancel
-                  </Button>
-                ) : null}
-                {reservation.status === "confirmed" ? (
-                  <>
-                    <Button
-                      variant="secondary"
-                      className="px-5 py-2.5 text-[11px]"
-                      disabled={actionLoadingId === reservation.id}
-                      onClick={() => runAction(reservation.id, "complete")}
-                    >
-                      Completed
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      className="px-5 py-2.5 text-[11px]"
-                      disabled={actionLoadingId === reservation.id}
-                      onClick={() => runAction(reservation.id, "no_show")}
-                    >
-                      No-show
-                    </Button>
-                  </>
-                ) : null}
+              <div className="mt-5">
+                <AdminReservationActions
+                  reservation={reservation}
+                  actionLoadingId={actionLoadingId}
+                  onAction={runAction}
+                />
               </div>
             </article>
           ))}

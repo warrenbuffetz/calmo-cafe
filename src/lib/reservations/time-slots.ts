@@ -90,6 +90,24 @@ export function formatReservationDateShort(dateStr: string): string {
   });
 }
 
+export function getScheduleWeekDates(): string[] {
+  const dates: string[] = [];
+  const start = new Date();
+
+  for (let i = 0; i < 7; i++) {
+    const date = new Date(start);
+    date.setDate(start.getDate() + i);
+    dates.push(formatDateInput(date));
+  }
+
+  return dates;
+}
+
+export function getScheduleRange(): { from: string; to: string } {
+  const dates = getScheduleWeekDates();
+  return { from: dates[0], to: dates[dates.length - 1] };
+}
+
 export function formatRequestedAt(iso: string): string {
   const date = new Date(iso);
   return date.toLocaleDateString("en-CA", {

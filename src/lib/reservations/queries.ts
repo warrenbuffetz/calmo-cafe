@@ -2,11 +2,12 @@ import "server-only";
 
 import type { CreateReservationInput } from "@/lib/reservations/schema";
 import type {
-  AdminStatusTab,
+  AdminListStatus,
   Reservation,
   ReservationCounts,
   ReservationStatus,
 } from "@/lib/reservations/types";
+import { ACTIVE_STATUSES } from "@/lib/reservations/types";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { logReservationEvent } from "@/lib/reservations/events";
 import type { StaffReservationEventAction } from "@/lib/reservations/types";
@@ -52,7 +53,9 @@ export async function getReservationByToken(token: string): Promise<Reservation 
 
 export async function listReservations(filters: {
   date?: string;
-  status?: AdminStatusTab;
+  from?: string;
+  to?: string;
+  status?: AdminListStatus;
   q?: string;
   sort?: "upcoming" | "recent";
 }): Promise<Reservation[]> {
@@ -67,10 +70,19 @@ export async function listReservations(filters: {
 
   if (filters.date) {
     query = query.eq("reservation_date", filters.date);
+  } else {
+    if (filters.from) {
+      query = query.gte("reservation_date", filters.from);
+    }
+    if (filters.to) {
+      query = query.lte("reservation_date", filters.to);
+    }
   }
 
   if (filters.status && filters.status !== "all") {
-    if (filters.status === "cancelled") {
+    if (filters.status === "active") {
+      query = query.in("status", ACTIVE_STATUSES);
+    } else if (filters.status === "cancelled") {
       query = query.in("status", ["cancelled_by_customer", "cancelled_by_restaurant"]);
     } else if (filters.status === "past") {
       query = query.in("status", ["completed", "no_show"]);

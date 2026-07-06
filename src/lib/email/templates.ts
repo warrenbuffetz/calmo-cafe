@@ -56,7 +56,7 @@ export function requestReceivedStaffEmail(reservation: Reservation) {
       <p style="margin:0 0 8px;"><strong>Email:</strong> ${reservation.customer_email}</p>
       <p style="margin:0 0 8px;"><strong>Phone:</strong> ${reservation.customer_phone}</p>
       <p style="margin-top:24px;">
-        <a href="${baseUrl}/admin/reservations" style="display:inline-block; background:${brand.brown}; color:${brand.beige}; padding:12px 20px; border-radius:999px; text-decoration:none; font-size:14px;">Review in admin</a>
+        <a href="${baseUrl}/reservations/admin" style="display:inline-block; background:${brand.brown}; color:${brand.beige}; padding:12px 20px; border-radius:999px; text-decoration:none; font-size:14px;">Review in admin</a>
       </p>
     `),
   };

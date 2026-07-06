@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { SiteChrome } from "@/components/SiteChrome";
-import { AdminReservationTable } from "@/components/admin/AdminReservationTable";
+import { AdminReservationsPanel } from "@/components/admin/AdminReservationsPanel";
 import { AdminSignOut } from "@/components/admin/AdminSignOut";
 import { sectionContent } from "@/lib/section";
 
@@ -23,13 +23,13 @@ export default function AdminReservationsPage() {
                 Reservations
               </h1>
               <p className="mt-4 font-body text-sm text-calmo-burnt-brown/70">
-                Pending requests appear first. Filter by date or search for a guest when needed.
+                Triage pending requests in Inbox, or switch to Schedule for today and the week ahead.
               </p>
             </div>
             <AdminSignOut />
           </div>
           <div className="mt-10">
-            <AdminReservationTable />
+            <AdminReservationsPanel />
           </div>
         </div>
       </section>

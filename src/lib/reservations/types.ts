@@ -44,6 +44,9 @@ export const CANCELLED_STATUSES: ReservationStatus[] = [
 
 export type AdminStatusTab = "pending" | "confirmed" | "cancelled" | "past" | "all";
 
+/** Pending + confirmed — used by the schedule view */
+export type AdminListStatus = AdminStatusTab | "active";
+
 export const ADMIN_STATUS_TABS: { id: AdminStatusTab; label: string }[] = [
   { id: "pending", label: "Pending" },
   { id: "confirmed", label: "Confirmed" },

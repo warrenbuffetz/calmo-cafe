@@ -5,12 +5,13 @@ import {
   verifyAdminSessionToken,
 } from "@/lib/auth/admin-cookie";
 
-const PUBLIC_ADMIN_PATHS = ["/admin/reservations/login"];
+const ADMIN_PREFIX = "/reservations/admin";
+const PUBLIC_ADMIN_PATHS = [`${ADMIN_PREFIX}/login`];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (!pathname.startsWith("/admin")) {
+  if (!pathname.startsWith(ADMIN_PREFIX)) {
     return NextResponse.next();
   }
 
@@ -23,7 +24,7 @@ export async function middleware(request: NextRequest) {
 
   if (!pin || !token || !(await verifyAdminSessionToken(pin, token))) {
     const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = "/admin/reservations/login";
+    loginUrl.pathname = `${ADMIN_PREFIX}/login`;
     loginUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(loginUrl);
   }
@@ -32,5 +33,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/reservations/admin/:path*"],
 };
