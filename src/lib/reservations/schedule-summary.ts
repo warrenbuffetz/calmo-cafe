@@ -33,7 +33,7 @@ export function getScheduleSummaryParts(summary: ScheduleSummary): ScheduleSumma
   const total = confirmed + pending;
 
   if (total === 0) {
-    return [{ text: "No reservations this week" }];
+    return [{ text: "No reservations" }];
   }
 
   const parts: ScheduleSummaryPart[] = [];
@@ -58,8 +58,6 @@ export function getScheduleSummaryParts(summary: ScheduleSummary): ScheduleSumma
       variant: "default",
     });
   }
-
-  parts.push({ text: "this week", variant: "default" });
 
   return parts;
 }

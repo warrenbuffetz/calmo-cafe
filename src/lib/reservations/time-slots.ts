@@ -90,22 +90,98 @@ export function formatReservationDateShort(dateStr: string): string {
   });
 }
 
-export function getScheduleWeekDates(): string[] {
+export function getScheduleWeekDates(weekOffset = 0): string[] {
   const dates: string[] = [];
   const start = new Date();
+  start.setDate(start.getDate() + weekOffset * 7);
+  const maxDate = new Date(`${getMaxBookingDate()}T23:59:59`);
 
   for (let i = 0; i < 7; i++) {
     const date = new Date(start);
     date.setDate(start.getDate() + i);
+    if (date > maxDate) break;
     dates.push(formatDateInput(date));
   }
 
   return dates;
 }
 
-export function getScheduleRange(): { from: string; to: string } {
-  const dates = getScheduleWeekDates();
+export function getWeekStartDate(weekOffset = 0): string {
+  const start = new Date();
+  start.setDate(start.getDate() + weekOffset * 7);
+  return formatDateInput(start);
+}
+
+export function getScheduleDateRange(): string[] {
+  const dates: string[] = [];
+  const start = new Date();
+  const maxDate = new Date(`${getMaxBookingDate()}T23:59:59`);
+  const cursor = new Date(start);
+
+  while (cursor <= maxDate) {
+    dates.push(formatDateInput(cursor));
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return dates;
+}
+
+export function getFullScheduleRange(): { from: string; to: string } {
+  return {
+    from: getMinBookingDate(),
+    to: getMaxBookingDate(),
+  };
+}
+
+export function getScheduleRange(weekOffset = 0): { from: string; to: string } {
+  const dates = getScheduleWeekDates(weekOffset);
+  if (dates.length === 0) {
+    const fallback = new Date();
+    fallback.setDate(fallback.getDate() + weekOffset * 7);
+    const fallbackStr = formatDateInput(fallback);
+    return { from: fallbackStr, to: fallbackStr };
+  }
   return { from: dates[0], to: dates[dates.length - 1] };
+}
+
+export function canAdvanceScheduleWeek(weekOffset: number): boolean {
+  const nextWeekStart = new Date();
+  nextWeekStart.setDate(nextWeekStart.getDate() + (weekOffset + 1) * 7);
+  const max = new Date(`${getMaxBookingDate()}T23:59:59`);
+  return nextWeekStart <= max;
+}
+
+export function getMaxScheduleWeekOffset(): number {
+  let offset = 0;
+  while (canAdvanceScheduleWeek(offset)) {
+    offset += 1;
+  }
+  return offset;
+}
+
+function formatScheduleDayLabel(dateStr: string): string {
+  const date = new Date(`${dateStr}T12:00:00`);
+  return date.toLocaleDateString("en-CA", { month: "short", day: "numeric" });
+}
+
+export function formatScheduleWeekLabel(weekDates: string[], weekOffset: number): string {
+  if (weekOffset === 0) {
+    return "This week";
+  }
+  if (weekDates.length === 0) {
+    return "";
+  }
+  const first = formatScheduleDayLabel(weekDates[0]);
+  const last = formatScheduleDayLabel(weekDates[weekDates.length - 1]);
+  return first === last ? first : `${first} – ${last}`;
+}
+
+export function parseScheduleWeekOffset(param: string | null): number {
+  const parsed = Number.parseInt(param ?? "0", 10);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    return 0;
+  }
+  return Math.min(parsed, getMaxScheduleWeekOffset());
 }
 
 export function formatRequestedAt(iso: string): string {

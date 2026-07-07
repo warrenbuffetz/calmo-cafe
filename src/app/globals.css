@@ -59,3 +59,39 @@ body {
 .animate-fade-up-delay-3 {
   animation: fade-up 0.8s ease-out 0.45s both;
 }
+
+@keyframes schedule-detail-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.375rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-schedule-detail-in {
+  animation: schedule-detail-in 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.schedule-refreshing {
+  opacity: 0.6;
+  transition: opacity 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-schedule-detail-in {
+    animation: none;
+  }
+
+  .schedule-day-chip {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .schedule-refreshing {
+    opacity: 1;
+    transition: none;
+  }
+}
