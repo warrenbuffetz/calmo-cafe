@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteChrome } from "@/components/SiteChrome";
-import { CancelReservationClient } from "@/components/reservation/CancelReservationClient";
+import { ManageReservationClient } from "@/components/reservation/ManageReservationClient";
 import { getReservationByToken } from "@/lib/reservations/queries";
 import { sectionContent } from "@/lib/section";
 
 export const metadata: Metadata = {
-  title: "Cancel reservation — Calmo",
+  title: "Manage reservation — Calmo",
   robots: { index: false, follow: false },
 };
 
-type CancelPageProps = {
+type ManagePageProps = {
   params: Promise<{ token: string }>;
 };
 
-export default async function CancelReservationPage({ params }: CancelPageProps) {
+export default async function ManageReservationPage({ params }: ManagePageProps) {
   const { token } = await params;
 
   let reservation = null;
@@ -36,20 +36,13 @@ export default async function CancelReservationPage({ params }: CancelPageProps)
             Reservations
           </p>
           <h1 className="mt-4 font-title text-3xl font-bold tracking-tight text-calmo-burnt-brown sm:text-4xl">
-            Cancel reservation
+            Manage reservation
           </h1>
           <p className="mt-4 font-body text-sm leading-relaxed text-calmo-burnt-brown/70">
-            Changed your mind? You can cancel below. Need to adjust your booking instead?{" "}
-            <a
-              href={`/reservations/manage/${reservation.cancellation_token}`}
-              className="text-calmo-red-brown underline decoration-calmo-red-brown/30 underline-offset-2 hover:text-calmo-blue"
-            >
-              Manage your reservation
-            </a>
-            .
+            View your booking details, add to calendar, or request a change.
           </p>
           <div className="mt-10">
-            <CancelReservationClient reservation={reservation} />
+            <ManageReservationClient reservation={reservation} />
           </div>
         </div>
       </section>

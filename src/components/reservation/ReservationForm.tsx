@@ -40,11 +40,14 @@ function getInitialFormState(): FormState {
   };
 }
 
-export function ReservationForm() {
+type ReservationFormProps = {
+  onSuccess?: () => void;
+};
+
+export function ReservationForm({ onSuccess }: ReservationFormProps) {
   const [form, setForm] = useState<FormState>(getInitialFormState);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
   const minDate = getMinBookingDate();
@@ -62,7 +65,16 @@ export function ReservationForm() {
   }, [timeSlots, form.reservation_time]);
 
   const updateField = (field: keyof FormState, value: string) => {
-    setForm((prev) => ({ ...prev, [field]: value }));
+    setForm((prev) => {
+      const next = { ...prev, [field]: value };
+
+      if (field === "reservation_date") {
+        const slots = getTimeSlotsForDate(value);
+        next.reservation_time = slots[0] ?? "";
+      }
+
+      return next;
+    });
     setErrors((prev) => ({ ...prev, [field]: undefined }));
     setServerError(null);
   };
@@ -70,6 +82,16 @@ export function ReservationForm() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (submitting) return;
+
+    if (timeSlots.length === 0) {
+      setServerError("Please choose a date when we're open.");
+      return;
+    }
+
+    if (!form.reservation_time) {
+      setServerError("Please choose a valid time.");
+      return;
+    }
 
     setSubmitting(true);
     setServerError(null);
@@ -84,7 +106,15 @@ export function ReservationForm() {
         }),
       });
 
-      const data = await response.json();
+      let data: { error?: string; fieldErrors?: Partial<Record<keyof FormState, string>> } = {};
+      try {
+        data = await response.json();
+      } catch {
+        if (!response.ok) {
+          setServerError("Something went wrong. Please try again.");
+          return;
+        }
+      }
 
       if (!response.ok) {
         if (data.fieldErrors) {
@@ -94,33 +124,13 @@ export function ReservationForm() {
         return;
       }
 
-      setSubmitted(true);
+      onSuccess?.();
     } catch {
       setServerError("Unable to submit right now. Please try again.");
     } finally {
       setSubmitting(false);
     }
   };
-
-  if (submitted) {
-    return (
-      <div className="rounded-2xl border border-calmo-burnt-brown/10 bg-calmo-beige/60 p-8 text-center sm:p-10">
-        <p className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
-          Request received
-        </p>
-        <h2 className="mt-4 font-title text-3xl font-bold text-calmo-burnt-brown">
-          We&apos;ll confirm your booking shortly
-        </h2>
-        <p className="mt-4 font-body text-sm leading-relaxed text-calmo-burnt-brown/70">
-          Thanks for requesting a table at Calmo. We&apos;ll review your details and email you once
-          your reservation is confirmed.
-        </p>
-        <p className="mt-6 font-accent text-sm italic text-calmo-burnt-brown/50">
-          Need to cancel later? Use the link in your confirmation email.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>

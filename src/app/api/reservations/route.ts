@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { createReservationSchema } from "@/lib/reservations/schema";
 import { createReservation } from "@/lib/reservations/queries";
 import {
@@ -50,7 +50,10 @@ export async function POST(request: Request) {
     }
 
     const reservation = await createReservation(input);
-    await sendReservationRequestEmails(reservation);
+
+    after(async () => {
+      await sendReservationRequestEmails(reservation);
+    });
 
     return NextResponse.json({ id: reservation.id }, { status: 201 });
   } catch (error) {
