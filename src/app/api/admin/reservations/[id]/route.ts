@@ -61,9 +61,9 @@ export async function PATCH(request: Request, context: RouteContext) {
     });
 
     if (parsed.data.action === "confirm") {
-      void sendReservationConfirmedEmail(reservation);
+      await sendReservationConfirmedEmail(reservation);
     } else if (parsed.data.action === "cancel") {
-      void sendReservationCancelledByRestaurantEmail(reservation);
+      await sendReservationCancelledByRestaurantEmail(reservation);
     }
 
     return NextResponse.json({ reservation });

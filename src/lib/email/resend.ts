@@ -3,17 +3,17 @@ import "server-only";
 import { Resend } from "resend";
 
 export function getResendClient(): Resend | null {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.RESEND_API_KEY?.trim();
   if (!apiKey) return null;
   return new Resend(apiKey);
 }
 
 export function getFromEmail(): string {
-  return process.env.RESERVATION_FROM_EMAIL ?? "onboarding@resend.dev";
+  return process.env.RESERVATION_FROM_EMAIL?.trim() || "onboarding@resend.dev";
 }
 
 export function getStaffEmail(): string {
-  return process.env.STAFF_NOTIFICATION_EMAIL ?? "hello@calmo.ca";
+  return process.env.STAFF_NOTIFICATION_EMAIL?.trim() || "hello@calmo.ca";
 }
 
 export function getAppBaseUrl(): string {

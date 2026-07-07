@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     }
 
     const reservation = await createReservation(input);
-    void sendReservationRequestEmails(reservation);
+    await sendReservationRequestEmails(reservation);
 
     return NextResponse.json({ id: reservation.id }, { status: 201 });
   } catch (error) {

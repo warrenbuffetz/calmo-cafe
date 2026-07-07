@@ -55,7 +55,7 @@ export async function POST(_request: Request, context: RouteContext) {
     }
 
     if (!wasAlreadyCancelled && reservation.status === "cancelled_by_customer") {
-      void sendReservationCancelledByCustomerStaffEmail(reservation);
+      await sendReservationCancelledByCustomerStaffEmail(reservation);
     }
 
     return NextResponse.json({ reservation });
