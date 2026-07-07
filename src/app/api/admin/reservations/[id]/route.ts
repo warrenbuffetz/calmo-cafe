@@ -60,14 +60,10 @@ export async function PATCH(request: Request, context: RouteContext) {
       actorId: "shared_pin",
     });
 
-    try {
-      if (parsed.data.action === "confirm") {
-        await sendReservationConfirmedEmail(reservation);
-      } else if (parsed.data.action === "cancel") {
-        await sendReservationCancelledByRestaurantEmail(reservation);
-      }
-    } catch (emailError) {
-      console.error("[admin/reservations] Email failed:", emailError);
+    if (parsed.data.action === "confirm") {
+      void sendReservationConfirmedEmail(reservation);
+    } else if (parsed.data.action === "cancel") {
+      void sendReservationCancelledByRestaurantEmail(reservation);
     }
 
     return NextResponse.json({ reservation });

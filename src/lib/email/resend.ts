@@ -17,5 +17,6 @@ export function getStaffEmail(): string {
 }
 
 export function getAppBaseUrl(): string {
-  return process.env.APP_BASE_URL ?? "http://localhost:3000";
+  const base = process.env.APP_BASE_URL ?? "http://localhost:3000";
+  return base.replace(/\/+$/, "");
 }

@@ -50,12 +50,7 @@ export async function POST(request: Request) {
     }
 
     const reservation = await createReservation(input);
-
-    try {
-      await sendReservationRequestEmails(reservation);
-    } catch (emailError) {
-      console.error("[reservations] Email failed:", emailError);
-    }
+    void sendReservationRequestEmails(reservation);
 
     return NextResponse.json({ id: reservation.id }, { status: 201 });
   } catch (error) {
