@@ -17,20 +17,13 @@ type ManageReservationClientProps = {
 const actionLinkClass =
   "inline-flex items-center justify-center rounded-full px-8 py-3.5 font-body text-sm font-medium uppercase tracking-[0.14em] transition-all";
 
-function buildModifyMailto(reservation: Reservation): string {
-  const subject = encodeURIComponent("Modify my Calmo reservation");
-  const body = encodeURIComponent(
-    `Hi Calmo team,\n\nI'd like to request a change to my reservation.\n\nName: ${reservation.customer_name}\nDate: ${formatReservationDate(reservation.reservation_date)}\nTime: ${formatReservationTime(reservation.reservation_time)}\nParty size: ${reservation.party_size}\n\nRequested changes:\n`,
-  );
-  return `mailto:hello@calmo.ca?subject=${subject}&body=${body}`;
-}
-
 export function ManageReservationClient({ reservation }: ManageReservationClientProps) {
   const isCancelled = CANCELLED_STATUSES.includes(reservation.status);
   const isTerminal =
     isCancelled || reservation.status === "completed" || reservation.status === "no_show";
   const calendarUrl = `/api/reservations/calendar/${reservation.cancellation_token}`;
   const cancelUrl = `/reservations/cancel/${reservation.cancellation_token}`;
+  const modifyUrl = `/reservations/manage/${reservation.cancellation_token}/modify`;
 
   return (
     <div className="space-y-6">
@@ -69,8 +62,8 @@ export function ManageReservationClient({ reservation }: ManageReservationClient
         <div className="rounded-2xl border border-calmo-burnt-brown/10 bg-white/60 p-8 sm:p-10">
           <h3 className="font-title text-lg font-bold text-calmo-burnt-brown">Your reservation</h3>
           <p className="mt-2 font-body text-sm leading-relaxed text-calmo-burnt-brown/70">
-            Add this to your calendar, browse the menu, or get directions. Need a change? Send us a
-            quick note and we&apos;ll help.
+            Add this to your calendar, browse the menu, or get directions. Need a change? Update your
+            details and we&apos;ll review the new request.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a
@@ -83,15 +76,15 @@ export function ManageReservationClient({ reservation }: ManageReservationClient
             >
               Add to calendar
             </a>
-            <a
-              href={buildModifyMailto(reservation)}
+            <Link
+              href={modifyUrl}
               className={cn(
                 actionLinkClass,
                 "border border-calmo-burnt-brown/15 bg-transparent text-calmo-burnt-brown hover:border-calmo-blue hover:bg-calmo-blue/20",
               )}
             >
               Modify
-            </a>
+            </Link>
             <Link
               href={cancelUrl}
               className={cn(

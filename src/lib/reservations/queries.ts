@@ -238,6 +238,37 @@ export async function cancelReservationByToken(token: string): Promise<Reservati
   return updateReservationStatus(reservation.id, "cancelled_by_customer");
 }
 
+export async function modifyReservationByToken(
+  token: string,
+  input: CreateReservationInput,
+): Promise<{ reservation: Reservation; previousReservation: Reservation }> {
+  const existing = await getReservationByToken(token);
+  if (!existing) {
+    throw new Error("Reservation not found.");
+  }
+
+  if (existing.status === "completed" || existing.status === "no_show") {
+    throw new Error("This reservation can no longer be modified.");
+  }
+
+  if (
+    existing.status === "cancelled_by_customer" ||
+    existing.status === "cancelled_by_restaurant"
+  ) {
+    throw new Error("This reservation can no longer be modified.");
+  }
+
+  const newReservation = await createReservation(input);
+
+  try {
+    await cancelReservationByToken(token);
+  } catch (error) {
+    console.error("[modify] Failed to cancel previous reservation:", error);
+  }
+
+  return { reservation: newReservation, previousReservation: existing };
+}
+
 export function canTransitionTo(
   current: ReservationStatus,
   action: "confirm" | "cancel" | "complete" | "no_show",

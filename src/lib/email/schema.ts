@@ -4,7 +4,7 @@ import type { Reservation } from "@/lib/reservations/types";
 import { venue } from "@/lib/venue";
 import { getReservationStartIso } from "@/lib/email/datetime";
 import { getAppBaseUrl } from "@/lib/email/resend";
-import { getCancelUrl, getManageUrl } from "@/lib/email/urls";
+import { getCancelUrl, getManageUrl, getModifyUrl } from "@/lib/email/urls";
 
 /**
  * Gmail rich reservation cards require Google Email Markup registration
@@ -39,7 +39,7 @@ export function buildReservationJsonLd(reservation: Reservation): string {
     startTime: getReservationStartIso(reservation),
     partySize: reservation.party_size,
     url: getManageUrl(reservation),
-    modifyReservationUrl: getManageUrl(reservation),
+    modifyReservationUrl: getModifyUrl(reservation),
     cancelReservationUrl: getCancelUrl(reservation),
     modifiedTime: reservation.updated_at,
     bookingTime: reservation.confirmed_at ?? reservation.created_at,

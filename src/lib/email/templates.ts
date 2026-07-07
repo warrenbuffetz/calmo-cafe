@@ -13,7 +13,7 @@ import {
   getCalendarUrl,
   getCancelUrl,
   getDirectionsUrl,
-  getManageUrl,
+  getModifyUrl,
   getMenuUrl,
 } from "@/lib/email/urls";
 
@@ -80,7 +80,7 @@ export function requestReceivedStaffEmail(reservation: Reservation) {
 
 export function confirmedCustomerEmail(reservation: Reservation) {
   const name = escapeHtml(reservation.customer_name);
-  const manageUrl = getManageUrl(reservation);
+  const manageUrl = getModifyUrl(reservation);
   const cancelUrl = getCancelUrl(reservation);
   const calendarUrl = getCalendarUrl(reservation);
 

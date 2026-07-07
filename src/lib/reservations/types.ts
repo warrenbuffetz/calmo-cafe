@@ -42,6 +42,10 @@ export const CANCELLED_STATUSES: ReservationStatus[] = [
   "cancelled_by_restaurant",
 ];
 
+export function isReservationModifiable(status: ReservationStatus): boolean {
+  return status === "pending" || status === "confirmed";
+}
+
 export type AdminStatusTab = "pending" | "confirmed" | "cancelled" | "past" | "all";
 
 /** Pending + confirmed — used by the schedule view */

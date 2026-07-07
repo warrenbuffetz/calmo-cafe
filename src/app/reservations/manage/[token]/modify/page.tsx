@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { SiteChrome } from "@/components/SiteChrome";
-import { ManageReservationClient } from "@/components/reservation/ManageReservationClient";
+import { ModifyReservationForm } from "@/components/reservation/ModifyReservationForm";
 import { getReservationByToken } from "@/lib/reservations/queries";
+import { isReservationModifiable } from "@/lib/reservations/types";
 import { sectionContent } from "@/lib/section";
 
 export const metadata: Metadata = {
-  title: "Manage reservation — Calmo",
+  title: "Modify reservation — Calmo",
   robots: { index: false, follow: false },
 };
 
-type ManagePageProps = {
+type ModifyPageProps = {
   params: Promise<{ token: string }>;
 };
 
-export default async function ManageReservationPage({ params }: ManagePageProps) {
+export default async function ModifyReservationPage({ params }: ModifyPageProps) {
   const { token } = await params;
 
   let reservation = null;
@@ -28,6 +29,10 @@ export default async function ManageReservationPage({ params }: ManagePageProps)
     notFound();
   }
 
+  if (!isReservationModifiable(reservation.status)) {
+    redirect(`/reservations/manage/${token}`);
+  }
+
   return (
     <SiteChrome>
       <section className={sectionContent}>
@@ -36,13 +41,14 @@ export default async function ManageReservationPage({ params }: ManagePageProps)
             Reservations
           </p>
           <h1 className="mt-4 font-title text-3xl font-bold tracking-tight text-calmo-burnt-brown sm:text-4xl">
-            Manage reservation
+            Modify reservation
           </h1>
           <p className="mt-4 font-body text-sm leading-relaxed text-calmo-burnt-brown/70">
-            View your booking details, add to calendar, or update your request.
+            Update your details below. We&apos;ll cancel your current booking and review your new
+            request.
           </p>
           <div className="mt-10">
-            <ManageReservationClient reservation={reservation} />
+            <ModifyReservationForm reservation={reservation} />
           </div>
         </div>
       </section>

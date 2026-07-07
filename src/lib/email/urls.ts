@@ -8,6 +8,10 @@ export function getManageUrl(reservation: Reservation): string {
   return `${getAppBaseUrl()}/reservations/manage/${reservation.cancellation_token}`;
 }
 
+export function getModifyUrl(reservation: Reservation): string {
+  return `${getAppBaseUrl()}/reservations/manage/${reservation.cancellation_token}/modify`;
+}
+
 export function getCancelUrl(reservation: Reservation): string {
   return `${getAppBaseUrl()}/reservations/cancel/${reservation.cancellation_token}`;
 }
