@@ -1,37 +1,36 @@
 import Image from "next/image";
+import { OpenStatus } from "@/components/OpenStatus";
 import { sectionX } from "@/lib/section";
 import { venue } from "@/lib/venue";
-import { OpenStatus } from "@/components/OpenStatus";
 import { ArrowDown } from "lucide-react";
 
 export function Hero() {
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      {/* Storefront illustration */}
       <div className="absolute inset-0 overflow-hidden">
-        <Image
-          src="/hero-storefront.png"
-          alt=""
+        <video
+          className="absolute inset-0 h-full w-full origin-top scale-[1.08] object-cover object-center blur-[4px] md:blur-[6px]"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/gallery/gallery-interior-poster.jpg"
           aria-hidden
-          fill
-          priority
-          unoptimized
-          className="origin-top scale-[1.08] object-cover object-[center_38%] blur-[4px] md:blur-[6px]"
-        />
+        >
+          <source src="/gallery/gallery-interior.mp4" type="video/mp4" />
+        </video>
       </div>
 
-      {/* Center scrim: contrast behind the text */}
       <div
         aria-hidden
         className="absolute inset-0 bg-[radial-gradient(ellipse_62%_60%_at_50%_46%,rgba(50,27,15,0.32),transparent_72%)]"
       />
-      {/* Soft edge vignette */}
       <div
         aria-hidden
         className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(50,27,15,0.24))]"
       />
 
-      {/* Foreground content */}
       <div
         className={`relative z-10 flex h-full flex-col items-center justify-center ${sectionX} pt-24 pb-24 text-center sm:pb-32`}
       >
@@ -53,11 +52,11 @@ export function Hero() {
           </div>
 
           <h1 className="animate-fade-up-delay-2 mt-8 max-w-2xl font-title1 text-3xl font-bold leading-tight tracking-tight text-calmo-beige sm:text-4xl md:text-5xl [text-shadow:0_2px_14px_rgba(50,27,15,0.65)]">
-            Brunch & coffee
+            {venue.tagline}
           </h1>
 
           <p className="animate-fade-up-delay-2 mt-4 max-w-md font-body text-sm leading-relaxed text-calmo-beige/80 sm:text-base [text-shadow:0_1px_10px_rgba(50,27,15,0.55)]">
-            Simple food. Good coffee. No fuss.
+            {venue.subtitle}
           </p>
 
           <div className="animate-fade-up-delay-3 mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">

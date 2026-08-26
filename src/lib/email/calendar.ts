@@ -24,7 +24,7 @@ export function buildReservationIcs(reservation: Reservation): string {
   const endMinutes = String(endTotal % 60).padStart(2, "0");
   const end = formatIcsDateTime(reservation.reservation_date, `${endHours}:${endMinutes}`);
 
-  const summary = foldLine(`Brunch at Calmo — party of ${reservation.party_size}`);
+  const summary = foldLine(`Calmo — party of ${reservation.party_size}`);
   const description = foldLine(
     `Reservation for ${reservation.customer_name}. ${formatReservationDate(reservation.reservation_date)} at ${formatReservationTime(reservation.reservation_time)}. Manage: ${getManageUrl(reservation)}`,
   );

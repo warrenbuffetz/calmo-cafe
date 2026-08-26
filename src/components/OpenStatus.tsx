@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { venue } from "@/lib/venue";
+import { venue, isOpenHours } from "@/lib/venue";
 
 const DAY_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const WEEKDAY_INDEX: Record<string, number> = {
@@ -47,23 +47,23 @@ type Status = { open: boolean; text: string };
 function computeStatus(): Status {
   const { day, minutes } = torontoNow();
 
-  const today = venue.hours.find((h) => h.dayIdx.includes(day));
-  if (today) {
-    const opensAt = toMinutes(today.open);
-    const closesAt = toMinutes(today.close);
+  const todayEntry = venue.hours.find((h) => h.dayIdx.includes(day));
+  if (todayEntry && isOpenHours(todayEntry)) {
+    const opensAt = toMinutes(todayEntry.open);
+    const closesAt = toMinutes(todayEntry.close);
     if (minutes >= opensAt && minutes < closesAt) {
-      return { open: true, text: `Open now · until ${label(today.close)}` };
+      return { open: true, text: `Open now · until ${label(todayEntry.close)}` };
     }
     if (minutes < opensAt) {
-      return { open: false, text: `Opens ${label(today.open)} today` };
+      return { open: false, text: `Opens ${label(todayEntry.open)} today` };
     }
   }
 
   for (let i = 1; i <= 7; i++) {
     const nextDay = (day + i) % 7;
-    const entry = venue.hours.find((h) => h.dayIdx.includes(nextDay));
-    if (entry) {
-      return { open: false, text: `Opens ${label(entry.open)} ${DAY_SHORT[nextDay]}` };
+    const entryRaw = venue.hours.find((h) => h.dayIdx.includes(nextDay));
+    if (entryRaw && isOpenHours(entryRaw)) {
+      return { open: false, text: `Opens ${label(entryRaw.open)} ${DAY_SHORT[nextDay]}` };
     }
   }
 

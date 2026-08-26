@@ -1,30 +1,30 @@
-import Image from "next/image";
+import { AboutPillarImage } from "@/components/AboutPillarImage";
 import { sectionShell } from "@/lib/section";
 
 const pillars = [
   {
     src: "/about-rooted.png",
-    alt: "Calmo cafe storefront on a neighborhood corner",
+    alt: "Calmo storefront sign on Dundas West",
     title: "Rooted here",
-    description: "A neighborhood spot with familiar faces and open doors.",
+    description: "A neighborhood cafe bar on Dundas West — familiar faces and open doors.",
   },
   {
     src: "/about-people.png",
-    alt: "Friends gathered around a cafe table sharing coffee",
+    alt: "Guests at the Calmo counter",
     title: "Made for people",
-    description: "A place to slow down, catch up, and feel at home.",
+    description: "A place to slow down, catch up, and stay awhile.",
   },
   {
     src: "/about-food.png",
-    alt: "Avocado toast with a fried egg and a Calmo latte with heart art",
+    alt: "Pastries coming out of the oven at Calmo",
     title: "Made with care",
-    description: "Thoughtful brunch plates and coffee, made with quality ingredients.",
+    description: "House-made desserts and coffee, baked and poured with intention.",
   },
   {
     src: "/about-simple.png",
-    alt: "A simple wooden chair beside a vase with budding branches",
+    alt: "Slices of pie and Basque cheesecake at Calmo",
     title: "Made to be simple",
-    description: "No fuss, no rush. Just good food and good vibes.",
+    description: "Pastry and coffee for now. Wine and simple plates on the way.",
   },
 ] as const;
 
@@ -37,7 +37,7 @@ export function About() {
             About Calmo
           </p>
           <h2 className="mt-4 font-title text-3xl font-bold leading-tight tracking-tight text-calmo-burnt-brown sm:text-4xl md:text-5xl">
-            Not just a café.
+            Not just a cafe bar.
             <br />
             A corner of the neighborhood.
           </h2>
@@ -48,15 +48,7 @@ export function About() {
           {pillars.map(({ src, alt, title, description }) => (
             <div key={title} className="flex flex-col items-center text-center">
               <div className="relative flex min-h-[200px] w-full items-center justify-center sm:min-h-[240px] lg:min-h-[280px]">
-                <Image
-                  src={src}
-                  alt={alt}
-                  width={1024}
-                  height={1024}
-                  unoptimized
-                  className="h-auto max-h-[220px] w-full max-w-[220px] object-contain sm:max-h-[260px] sm:max-w-[260px] lg:max-h-[300px] lg:max-w-[300px]"
-                  sizes="(min-width: 1024px) 22vw, 45vw"
-                />
+                <AboutPillarImage src={src} alt={alt} />
               </div>
               <h3 className="mt-4 font-title text-base font-bold text-calmo-burnt-brown sm:text-lg">
                 {title}

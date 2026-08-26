@@ -1,5 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
+import { isReservationsEnabled } from "@/lib/features";
+
+const NAV_LINKS = [
+  { href: "/#about", label: "About" },
+  { href: "/#menu", label: "Menu" },
+  ...(isReservationsEnabled() ? [{ href: "/reservations", label: "Reserve" }] : []),
+  { href: "/#visit", label: "Visit" },
+];
 
 export function Header() {
   return (
@@ -27,12 +35,7 @@ export function Header() {
         </Link>
         <nav aria-label="Primary">
           <ul className="flex items-center gap-6 sm:gap-8">
-            {[
-              { href: "/#about", label: "About" },
-              { href: "/#menu", label: "Menu" },
-              { href: "/reservations", label: "Reserve" },
-              { href: "/#visit", label: "Visit" },
-            ].map(({ href, label }) => (
+            {NAV_LINKS.map(({ href, label }) => (
               <li key={href}>
                 <Link
                   href={href}

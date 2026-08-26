@@ -1,32 +1,13 @@
 import Image from "next/image";
-import { Clock, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Instagram, Mail, MapPin } from "lucide-react";
 import { SketchField } from "@/components/SketchField";
 import { sectionShell } from "@/lib/section";
 import { venue } from "@/lib/venue";
 
 const { hours, address } = venue;
 
-const contactLinks = [
-  {
-    href: "tel:+14165550127",
-    label: "Call Calmo",
-    icon: Phone,
-  },
-  {
-    href: "mailto:hello@calmo.ca",
-    label: "Email Calmo",
-    icon: Mail,
-  },
-  {
-    href: "https://instagram.com",
-    label: "Calmo on Instagram",
-    icon: Instagram,
-    external: true,
-  },
-];
-
-const iconLinkClassName =
-  "inline-flex h-10 w-10 items-center justify-center rounded-full border border-calmo-burnt-brown/12 text-calmo-burnt-brown/60 transition-all hover:border-calmo-blue hover:bg-calmo-blue/20 hover:text-calmo-blue";
+const followLinkClassName =
+  "group flex items-center gap-2.5 font-body text-sm leading-relaxed text-calmo-burnt-brown/75 transition-colors hover:text-calmo-blue";
 
 export function Footer() {
   return (
@@ -45,7 +26,7 @@ export function Footer() {
         <div>
           <Image
             src="/footer-logo.png"
-            alt="Calmo - Brunch & Coffee"
+            alt={`Calmo — ${venue.category}`}
             width={1024}
             height={1024}
             unoptimized
@@ -101,7 +82,7 @@ export function Footer() {
             Hours
           </h2>
           <ul className="mt-4 space-y-3">
-            {hours.map(({ days, time }) => (
+            {hours.map(({ days, time, closed }) => (
               <li
                 key={days}
                 className="flex w-fit items-center gap-6 border-b border-calmo-burnt-brown/8 pb-3 font-body text-sm text-calmo-burnt-brown/75 last:border-0"
@@ -110,7 +91,15 @@ export function Footer() {
                   <Clock className="h-3.5 w-3.5 text-calmo-burnt-brown/35" strokeWidth={1.75} />
                   {days}
                 </span>
-                <span className="font-medium text-calmo-burnt-brown">{time}</span>
+                <span
+                  className={
+                    closed
+                      ? "font-medium text-calmo-burnt-brown/45"
+                      : "font-medium text-calmo-burnt-brown"
+                  }
+                >
+                  {time}
+                </span>
               </li>
             ))}
           </ul>
@@ -118,25 +107,37 @@ export function Footer() {
 
         <div>
           <h2 className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
-            Contact
+            Follow
           </h2>
-          <div className="mt-4 flex items-center gap-4">
-            {contactLinks.map(({ href, label, icon: Icon, external }) => (
+          <ul className="mt-4 space-y-3">
+            <li>
               <a
-                key={label}
-                href={href}
-                {...(external
-                  ? { target: "_blank", rel: "noopener noreferrer" }
-                  : {})}
-                aria-label={label}
-                className={iconLinkClassName}
+                href="https://www.instagram.com/calmo.cafebar/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={followLinkClassName}
               >
-                <Icon className="h-4 w-4" strokeWidth={1.75} />
+                <Instagram
+                  className="h-4 w-4 shrink-0 text-calmo-red-brown transition-colors group-hover:text-calmo-blue"
+                  strokeWidth={1.75}
+                />
+                <span className="font-medium text-calmo-burnt-brown transition-colors group-hover:text-calmo-blue">
+                  @calmo.cafebar
+                </span>
               </a>
-            ))}
-          </div>
+            </li>
+            <li>
+              <a href="mailto:hello@calmo.ca" className={followLinkClassName}>
+                <Mail
+                  className="h-4 w-4 shrink-0 text-calmo-red-brown transition-colors group-hover:text-calmo-blue"
+                  strokeWidth={1.75}
+                />
+                <span>hello@calmo.ca</span>
+              </a>
+            </li>
+          </ul>
           <p className="mt-6 font-accent text-sm italic leading-relaxed text-calmo-burnt-brown/45">
-            Calmo captures the warm moments created together.
+            {venue.description}
           </p>
         </div>
       </div>

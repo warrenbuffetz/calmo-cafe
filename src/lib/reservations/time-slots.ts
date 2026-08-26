@@ -1,4 +1,4 @@
-import { venue } from "@/lib/venue";
+import { venue, isOpenHours } from "@/lib/venue";
 
 const BOOKING_WINDOW_DAYS = 30;
 
@@ -17,11 +17,11 @@ export function getTimeSlotsForDate(dateStr: string): string[] {
   const date = new Date(`${dateStr}T12:00:00`);
   const dayIdx = date.getDay();
 
-  const hoursEntry = venue.hours.find((entry) => entry.dayIdx.includes(dayIdx));
-  if (!hoursEntry) return [];
+  const hoursRaw = venue.hours.find((entry) => entry.dayIdx.includes(dayIdx));
+  if (!hoursRaw || !isOpenHours(hoursRaw)) return [];
 
-  const openMinutes = parseTimeToMinutes(hoursEntry.open);
-  const closeMinutes = parseTimeToMinutes(hoursEntry.close);
+  const openMinutes = parseTimeToMinutes(hoursRaw.open);
+  const closeMinutes = parseTimeToMinutes(hoursRaw.close);
   const lastSlotMinutes = closeMinutes - 30;
 
   const slots: string[] = [];

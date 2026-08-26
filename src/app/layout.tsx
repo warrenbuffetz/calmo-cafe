@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Barriecito, DM_Sans, Libre_Baskerville, Rubik } from "next/font/google";
+import { venue } from "@/lib/venue";
 import "./globals.css";
 
 const barriecito = Barriecito({
@@ -32,9 +33,8 @@ const libreBaskerville = Libre_Baskerville({
 });
 
 export const metadata: Metadata = {
-  title: "Calmo — Simple food. Good coffee. No fuss.",
-  description:
-    "Calmo captures the warm moments created together. A neighborhood spot for fresh pastries, elevated breakfast sandwiches, and perfect coffee.",
+  title: `Calmo — ${venue.tagline}`,
+  description: venue.description,
 };
 
 export default function RootLayout({

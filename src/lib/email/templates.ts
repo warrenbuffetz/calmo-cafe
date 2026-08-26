@@ -5,6 +5,7 @@ import {
   formatReservationDate,
   formatReservationTime,
 } from "@/lib/reservations/time-slots";
+import { venue } from "@/lib/venue";
 import { emailBrand, emailFonts } from "@/lib/email/brand";
 import { emailButton, emailDetailCard, emailLayout, escapeHtml } from "@/lib/email/layout";
 import { buildReservationJsonLd } from "@/lib/email/schema";
@@ -47,7 +48,7 @@ export function requestReceivedCustomerEmail(reservation: Reservation) {
       preheader: "We'll be in touch once your table is set.",
       content: `
         ${headline("We've got your request")}
-        ${subhead("Simple food. Good coffee. No fuss.")}
+        ${subhead(venue.tagline)}
         ${bodyCopy(`Hi ${name}, thanks for reaching out. We've received your reservation request and will confirm your table shortly.`)}
         ${emailDetailCard(reservationDetailRows(reservation))}
         ${bodyCopy("Walk-ins are always welcome too — we'll email you as soon as your booking is confirmed.")}
@@ -85,7 +86,7 @@ export function confirmedCustomerEmail(reservation: Reservation) {
   const calendarUrl = getCalendarUrl(reservation);
 
   return {
-    subject: "You're all set for brunch — Calmo",
+    subject: "You're all set — Calmo",
     html: emailLayout({
       preheader: `Confirmed for ${formatReservationDate(reservation.reservation_date)} at ${formatReservationTime(reservation.reservation_time)}`,
       jsonLd: buildReservationJsonLd(reservation),
@@ -104,7 +105,7 @@ export function confirmedCustomerEmail(reservation: Reservation) {
           ${emailButton(getMenuUrl(), "See menu", "secondary")}
           ${emailButton(getDirectionsUrl(), "Get directions", "secondary")}
         </p>
-        ${bodyCopy("A few notes: walk-ins are always welcome, and we're a cozy neighborhood spot — no rush, no fuss. See you soon.")}
+        ${bodyCopy("A few notes: walk-ins are always welcome, and we're a cozy neighborhood cafe bar — no rush, no fuss. See you soon.")}
       `,
     }),
   };

@@ -101,7 +101,7 @@ export function emailLayout({ preheader, jsonLd, content }: EmailLayoutOptions):
                     <p style="margin:0 0 8px; font-family:${emailFonts.title}; font-size:14px; font-weight:700; color:${emailBrand.brown};">Calmo</p>
                     <p style="margin:0 0 4px;">${escapeHtml(venue.address.line1)}</p>
                     <p style="margin:0 0 12px;">${escapeHtml(venue.address.line2)}</p>
-                    <p style="margin:0; font-family:${emailFonts.accent}; font-style:italic; font-size:12px; color:rgba(50,27,15,0.45);">Simple food. Good coffee. No fuss.</p>
+                    <p style="margin:0; font-family:${emailFonts.accent}; font-style:italic; font-size:12px; color:rgba(50,27,15,0.45);">${escapeHtml(venue.tagline)}</p>
                   </td>
                 </tr>
               </table>

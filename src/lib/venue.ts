@@ -2,13 +2,23 @@ export type VenueHours = {
   days: string;
   time: string;
   dayIdx: number[];
-  open: string;
-  close: string;
+  open?: string;
+  close?: string;
+  closed?: boolean;
 };
 
+export function isOpenHours(entry: VenueHours): entry is VenueHours & { open: string; close: string } {
+  return !entry.closed && !!entry.open && !!entry.close;
+}
+
 export const venue = {
-  category: "Brunch & Coffee",
+  category: "Cafe & Dessert Bar",
   neighborhood: "Dundas West, Toronto",
+  tagline: "Desserts, coffee & calm.",
+  subtitle:
+    "House-made pastries and coffee today. Wine bar and simple plates on the way.",
+  description:
+    "A neighborhood cafe bar on Dundas West — house desserts, coffee, and specialty drinks. Wine and simple plates coming soon.",
   address: {
     line1: "1227 Dundas St W",
     line2: "Toronto, ON M6J 1X6",
@@ -16,8 +26,7 @@ export const venue = {
       "https://www.google.com/maps/search/?api=1&query=1227+Dundas+St+W,+Toronto,+ON+M6J+1X6",
   },
   hours: [
-    { days: "Mon – Thu", time: "7am – 4pm", dayIdx: [1, 2, 3, 4], open: "07:00", close: "16:00" },
-    { days: "Fri – Sat", time: "7am – 8pm", dayIdx: [5, 6], open: "07:00", close: "20:00" },
-    { days: "Sun", time: "8am – 4pm", dayIdx: [0], open: "08:00", close: "16:00" },
+    { days: "Mon", time: "Closed", dayIdx: [1], closed: true },
+    { days: "Tue – Sun", time: "8am – 4pm", dayIdx: [0, 2, 3, 4, 5, 6], open: "08:00", close: "16:00" },
   ] satisfies VenueHours[],
 } as const;
