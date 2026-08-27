@@ -5,10 +5,14 @@ import {
   formatReservationDate,
   formatReservationTime,
 } from "@/lib/reservations/time-slots";
+import { isMenuEnabled } from "@/lib/features";
 import type { Reservation } from "@/lib/reservations/types";
 import { CANCELLED_STATUSES, STATUS_LABELS } from "@/lib/reservations/types";
 import { venue } from "@/lib/venue";
 import { cn } from "@/lib/utils";
+
+const menuLink = isMenuEnabled() ? "/#menu" : "/#gallery";
+const menuLinkLabel = isMenuEnabled() ? "See menu" : "Follow along";
 
 type ManageReservationClientProps = {
   reservation: Reservation;
@@ -97,13 +101,13 @@ export function ManageReservationClient({ reservation }: ManageReservationClient
           </div>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
-              href="/#menu"
+              href={menuLink}
               className={cn(
                 actionLinkClass,
                 "border border-calmo-burnt-brown/15 bg-transparent text-calmo-burnt-brown hover:border-calmo-blue hover:bg-calmo-blue/20",
               )}
             >
-              See menu
+              {menuLinkLabel}
             </Link>
             <a
               href={venue.address.mapsUrl}
@@ -126,13 +130,13 @@ export function ManageReservationClient({ reservation }: ManageReservationClient
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Link
-              href="/#menu"
+              href={menuLink}
               className={cn(
                 actionLinkClass,
                 "border border-calmo-burnt-brown/15 bg-transparent text-calmo-burnt-brown hover:border-calmo-blue hover:bg-calmo-blue/20",
               )}
             >
-              See menu
+              {menuLinkLabel}
             </Link>
             <a
               href={venue.address.mapsUrl}

@@ -2,6 +2,7 @@ import "server-only";
 
 import type { Reservation } from "@/lib/reservations/types";
 import { getAppBaseUrl } from "@/lib/email/resend";
+import { isMenuEnabled } from "@/lib/features";
 import { venue } from "@/lib/venue";
 
 export function getManageUrl(reservation: Reservation): string {
@@ -21,7 +22,7 @@ export function getCalendarUrl(reservation: Reservation): string {
 }
 
 export function getMenuUrl(): string {
-  return `${getAppBaseUrl()}/#menu`;
+  return `${getAppBaseUrl()}${isMenuEnabled() ? "/#menu" : "/#gallery"}`;
 }
 
 export function getDirectionsUrl(): string {

@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Instagram } from "lucide-react";
 import { SketchField } from "@/components/SketchField";
-import { sectionShell } from "@/lib/section";
+import { sectionShell, sectionSurfaceBase } from "@/lib/section";
 import { cn } from "@/lib/utils";
 
 const INSTAGRAM_URL = "https://www.instagram.com/calmo.cafebar/";
@@ -19,6 +19,9 @@ type CollageItem = {
   placement: string;
   tape?: TapeVariant;
   tapeRotate?: string;
+  ownerNote?: boolean;
+  kraftNote?: boolean;
+  pushPin?: boolean;
 };
 
 const collageItems: CollageItem[] = [
@@ -27,25 +30,25 @@ const collageItems: CollageItem[] = [
     alt: "Calmo storefront sign on Dundas West",
     aspect: "aspect-[3/4]",
     placement:
-      "w-[78%] -rotate-2 self-start md:w-[64%] lg:absolute lg:left-0 lg:top-0 lg:w-[34%] lg:-rotate-[2deg] lg:z-10",
+      "w-[78%] -rotate-2 self-start md:w-[64%] lg:absolute lg:left-0 lg:top-5 lg:w-[34%] lg:-rotate-[2deg] lg:z-10",
     tape: "plain",
     tapeRotate: "-rotate-1",
   },
   {
     src: "/gallery/gallery-chef-portrait.jpg",
-    alt: "Chef in the Calmo kitchen",
+    alt: "Jinho in the Calmo kitchen",
     aspect: "aspect-[3/4]",
     placement:
-      "w-[72%] rotate-1 self-end md:w-[58%] lg:absolute lg:left-[36%] lg:top-1 lg:w-[24%] lg:rotate-[1.5deg] lg:z-[15]",
-    tape: "corner",
-    tapeRotate: "rotate-[4deg]",
+      "w-[76%] rotate-[1.5deg] self-end md:w-[62%] lg:absolute lg:right-0 lg:top-2 lg:w-[34%] lg:rotate-2 lg:z-20",
+    ownerNote: true,
+    pushPin: true,
   },
   {
     src: "/gallery/gallery-counter.jpg",
     alt: "Guests at the Calmo cafe counter",
     aspect: "aspect-[3/4]",
     placement:
-      "w-[76%] rotate-[1.5deg] self-end md:w-[62%] lg:absolute lg:right-0 lg:top-2 lg:w-[34%] lg:rotate-2 lg:z-20",
+      "w-[72%] rotate-1 self-end md:w-[58%] lg:absolute lg:left-[36%] lg:top-1 lg:w-[24%] lg:rotate-[1.5deg] lg:z-[15]",
     tape: "wide",
     tapeRotate: "rotate-1",
   },
@@ -54,13 +57,13 @@ const collageItems: CollageItem[] = [
     alt: "Dessert prep in the Calmo kitchen",
     aspect: "aspect-[3/4]",
     placement:
-      "w-[70%] -rotate-[1.5deg] self-center md:w-[56%] lg:absolute lg:left-[40%] lg:top-[24%] lg:w-[24%] lg:-rotate-[1.5deg] lg:z-[18]",
+      "w-[70%] -rotate-[1.5deg] self-center md:w-[56%] lg:absolute lg:left-[40%] lg:top-[27%] lg:w-[24%] lg:-rotate-[1.5deg] lg:z-[18]",
     tape: "grid",
     tapeRotate: "-rotate-[2deg]",
   },
   {
-    src: "/gallery/gallery-labeling.jpg",
-    alt: "Hand-labeling desserts at the Calmo counter",
+    src: "/gallery/gallery-self-service.jpg",
+    alt: "Self-service water, cups, and napkins at the Calmo counter",
     aspect: "aspect-[3/4]",
     placement:
       "w-[74%] rotate-2 self-end md:w-[60%] lg:absolute lg:left-0 lg:top-[44%] lg:w-[21%] lg:rotate-[2deg] lg:z-[25]",
@@ -68,11 +71,11 @@ const collageItems: CollageItem[] = [
     tapeRotate: "-rotate-[3deg]",
   },
   {
-    src: "/gallery/gallery-menu.jpg",
-    alt: "Calmo cafe menu with coffee and specialty drinks",
-    aspect: "aspect-[720/406]",
+    src: "/gallery/gallery-counter-labeling.jpg",
+    alt: "Writing kraft labels for pastries at the Calmo counter",
+    aspect: "aspect-[3/4]",
     placement:
-      "w-[88%] rotate-1 self-start md:w-[76%] lg:absolute lg:left-[18%] lg:top-[58%] lg:w-[44%] lg:rotate-[1deg] lg:z-10",
+      "w-[80%] rotate-1 self-start md:w-[68%] lg:absolute lg:left-[12%] lg:top-[56%] lg:w-[34%] lg:rotate-[1.5deg] lg:z-10",
     tape: "plain",
     tapeRotate: "rotate-[0.5deg]",
   },
@@ -83,7 +86,7 @@ const collageItems: CollageItem[] = [
     placement:
       "w-[76%] -rotate-1 self-end md:w-[62%] lg:absolute lg:right-0 lg:bottom-2 lg:w-[28%] lg:-rotate-[1.5deg] lg:z-30",
     tape: "corner",
-    tapeRotate: "-rotate-2",
+    kraftNote: true,
   },
 ];
 
@@ -113,28 +116,80 @@ function InstagramCta({ className }: { className?: string }) {
   );
 }
 
+const tapeAssets = {
+  plain: {
+    src: "/gallery/gallery-tape-plain.png",
+    width: 883,
+    height: 294,
+  },
+  grid: {
+    src: "/gallery/gallery-tape-grid.png",
+    width: 833,
+    height: 293,
+  },
+} as const;
+
 function MaskingTape({
   variant = "plain",
+  wide = false,
   className,
 }: {
-  variant?: TapeVariant;
+  variant?: keyof typeof tapeAssets;
+  wide?: boolean;
   className?: string;
 }) {
-  const isGrid = variant === "grid";
-  const isWide = variant === "wide";
+  const asset = tapeAssets[variant];
 
   return (
-    <div
+    <Image
+      src={asset.src}
+      alt=""
       aria-hidden
+      width={asset.width}
+      height={asset.height}
+      unoptimized
       className={cn(
-        "absolute z-20 shadow-[0_1px_2px_rgba(50,27,15,0.08)]",
-        isWide ? "h-[17px] w-[4.5rem]" : "h-[18px] w-[3.25rem]",
-        isGrid
-          ? "bg-[#e5dcc8]/80 [background-image:linear-gradient(rgba(50,27,15,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(50,27,15,0.06)_1px,transparent_1px)] [background-size:5px_5px]"
-          : "border border-[#d9cdb5]/50 bg-[#ebe3d0]/80",
+        "absolute z-20 h-auto drop-shadow-[0_1px_3px_rgba(50,27,15,0.14)]",
+        wide ? "w-[5rem]" : variant === "grid" ? "w-[3.5rem]" : "w-[3.25rem]",
         className,
       )}
     />
+  );
+}
+
+function OwnerNoteAccent() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute -bottom-3 -right-6 z-30 w-[7.5rem] rotate-[5deg] drop-shadow-[2px_4px_8px_rgba(50,27,15,0.16)] sm:-bottom-4 sm:-right-7 sm:w-[8.25rem]"
+    >
+      <Image
+        src="/gallery/gallery-owner-note.png"
+        alt=""
+        width={935}
+        height={472}
+        unoptimized
+        className="h-auto w-full"
+      />
+    </div>
+  );
+}
+
+function PushPinAccent() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute left-1/2 top-0 z-30 w-9 -translate-x-1/2 -translate-y-[45%] drop-shadow-[0_2px_5px_rgba(50,27,15,0.28)] sm:w-10"
+    >
+      <Image
+        src="/gallery/gallery-pin.png"
+        alt=""
+        width={575}
+        height={570}
+        unoptimized
+        className="h-auto w-full"
+      />
+    </div>
   );
 }
 
@@ -144,11 +199,17 @@ function PhotoTape({ variant, tapeRotate }: { variant: TapeVariant; tapeRotate?:
       <>
         <MaskingTape
           variant="plain"
-          className={cn("-left-1 top-2", tapeRotate ?? "-rotate-[8deg]")}
+          className={cn(
+            "left-0 top-0 w-[3rem] -translate-x-[32%] -translate-y-[36%] -rotate-45",
+            tapeRotate,
+          )}
         />
         <MaskingTape
           variant="grid"
-          className={cn("-right-0.5 top-3", tapeRotate ? `${tapeRotate} rotate-[6deg]` : "rotate-[6deg]")}
+          className={cn(
+            "right-0 top-0 w-[3rem] translate-x-[32%] -translate-y-[36%] rotate-45",
+            tapeRotate,
+          )}
         />
       </>
     );
@@ -157,13 +218,27 @@ function PhotoTape({ variant, tapeRotate }: { variant: TapeVariant; tapeRotate?:
   return (
     <MaskingTape
       variant={variant === "grid" ? "grid" : "plain"}
-      className={cn(
-        "-top-2.5 left-1/2 -translate-x-1/2",
-        tapeRotate,
-        variant === "wide" && "w-[4.75rem]",
-        variant === "grid" && "w-[3.5rem]",
-      )}
+      wide={variant === "wide"}
+      className={cn("-top-3 left-1/2 -translate-x-1/2", tapeRotate)}
     />
+  );
+}
+
+function FreshFromCounterCallout() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute bottom-0 left-1 z-20 translate-y-[32%] sm:left-3"
+    >
+      <Image
+        src="/gallery/gallery-fresh-from-counter.png"
+        alt=""
+        width={634}
+        height={721}
+        unoptimized
+        className="h-auto w-[8.75rem] drop-shadow-[0_1px_0_rgba(243,238,215,0.35)] sm:w-[9.75rem] lg:w-[10.25rem]"
+      />
+    </div>
   );
 }
 
@@ -181,16 +256,18 @@ function GalleryIntro() {
         more on Instagram.
       </p>
       <InstagramCta className="mt-8" />
-      <GalleryTile
-        src={pastriesItem.src}
-        alt={pastriesItem.alt}
-        aspect={pastriesItem.aspect}
-        placement={pastriesItem.placement}
-        tape={pastriesItem.tape}
-        tapeRotate={pastriesItem.tapeRotate}
-        sizes="(min-width: 1024px) 22rem, 85vw"
-        className="mt-8"
-      />
+      <div className="relative mt-8 pb-16 sm:pb-[4.5rem]">
+        <GalleryTile
+          src={pastriesItem.src}
+          alt={pastriesItem.alt}
+          aspect={pastriesItem.aspect}
+          placement={pastriesItem.placement}
+          tape={pastriesItem.tape}
+          tapeRotate={pastriesItem.tapeRotate}
+          sizes="(min-width: 1024px) 22rem, 85vw"
+        />
+        <FreshFromCounterCallout />
+      </div>
     </div>
   );
 }
@@ -205,6 +282,9 @@ type GalleryTileProps = {
   className?: string;
   tape?: TapeVariant;
   tapeRotate?: string;
+  ownerNote?: boolean;
+  kraftNote?: boolean;
+  pushPin?: boolean;
 };
 
 function GalleryTile({
@@ -217,6 +297,9 @@ function GalleryTile({
   className,
   tape,
   tapeRotate,
+  ownerNote,
+  kraftNote,
+  pushPin,
 }: GalleryTileProps) {
   return (
     <Link
@@ -230,7 +313,10 @@ function GalleryTile({
         className,
       )}
     >
+      {pushPin && <PushPinAccent />}
       {tape && <PhotoTape variant={tape} tapeRotate={tapeRotate} />}
+      {ownerNote && <OwnerNoteAccent />}
+      {kraftNote && <GalleryKraftNote />}
 
       <div className="overflow-hidden rounded-sm bg-white p-1.5 shadow-[3px_6px_0_rgba(50,27,15,0.09)] transition-shadow duration-500 group-hover:shadow-[5px_10px_0_rgba(50,27,15,0.12)] md:p-2">
         <div className={cn("relative w-full overflow-hidden", aspect)}>
@@ -253,9 +339,49 @@ function GalleryTile({
   );
 }
 
+function GalleryKraftNote() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute top-full right-[-0.25rem] z-[32] mt-2 w-[10.5rem] rotate-[1.5deg] drop-shadow-[4px_9px_18px_rgba(50,27,15,0.26)] sm:mt-3 sm:w-[11.5rem] lg:right-0 lg:w-[12.5rem] lg:rotate-[2deg]"
+    >
+      <Image
+        src="/gallery/gallery-kraft-note.png"
+        alt=""
+        width={976}
+        height={491}
+        unoptimized
+        className="h-auto w-full"
+      />
+    </div>
+  );
+}
+
+function GalleryStemAccent() {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute top-[7%] left-0 z-[35] hidden w-[4.75rem] -translate-x-[calc(100%+1.5rem)] rotate-[1deg] drop-shadow-[2px_5px_10px_rgba(50,27,15,0.16)] lg:block lg:top-[9%] lg:w-[5.25rem]"
+    >
+      <Image
+        src="/gallery/gallery-dried-stem.png"
+        alt=""
+        width={413}
+        height={662}
+        unoptimized
+        className="h-auto w-full"
+      />
+      <MaskingTape
+        variant="plain"
+        className="left-1/2 top-[58%] z-10 w-[2.85rem] -translate-x-1/2 -rotate-[1deg] opacity-95"
+      />
+    </div>
+  );
+}
+
 export function Gallery() {
   return (
-    <section id="gallery" className={`${sectionShell} relative overflow-x-clip`}>
+    <section id="gallery" className={`${sectionShell} ${sectionSurfaceBase} relative overflow-x-clip`}>
       <SketchField
         items={[
           {
@@ -273,10 +399,11 @@ export function Gallery() {
         ]}
       />
       <div className="relative z-10 mx-auto max-w-6xl text-calmo-burnt-brown">
-        <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-14">
+        <div className="relative flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:items-start lg:gap-14">
           <GalleryIntro />
 
-          <div className="relative flex flex-col gap-10 md:gap-12 lg:min-h-[580px] lg:gap-0">
+          <div className="relative flex flex-col gap-10 md:gap-12 lg:min-h-[580px] lg:gap-0 lg:pb-24">
+            <GalleryStemAccent />
             {collageItems.map((item, index) => (
               <GalleryTile
                 key={item.src}
@@ -286,6 +413,9 @@ export function Gallery() {
                 placement={item.placement}
                 tape={item.tape}
                 tapeRotate={item.tapeRotate}
+                ownerNote={item.ownerNote}
+                kraftNote={item.kraftNote}
+                pushPin={item.pushPin}
                 sizes="(min-width: 1024px) 30vw, 85vw"
                 priority={index < 2}
               />

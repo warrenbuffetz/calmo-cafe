@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { OpenStatus } from "@/components/OpenStatus";
+import { isMenuEnabled } from "@/lib/features";
 import { sectionX } from "@/lib/section";
 import { venue } from "@/lib/venue";
 import { ArrowDown } from "lucide-react";
@@ -24,19 +25,21 @@ export function Hero() {
 
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(ellipse_62%_60%_at_50%_46%,rgba(50,27,15,0.32),transparent_72%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_62%_60%_at_50%_46%,rgba(50,27,15,0.26),transparent_72%)]"
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(50,27,15,0.24))]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_48%,rgba(50,27,15,0.14))]"
       />
 
       <div
         className={`relative z-10 flex h-full flex-col items-center justify-center ${sectionX} pt-24 pb-24 text-center sm:pb-32`}
       >
         <div className="mx-auto flex max-w-4xl flex-col items-center">
-          <p className="animate-fade-up mb-6 font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown [text-shadow:0_1px_8px_rgba(50,27,15,0.45)]">
-            {venue.neighborhood} · Walk-ins only
+          <p className="animate-fade-up mb-6 font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-beige/90 [text-shadow:0_1px_10px_rgba(50,27,15,0.55)]">
+            {venue.neighborhood}
+            <span className="text-calmo-beige/55"> · </span>
+            <span className="text-calmo-blue">Walk-ins only</span>
           </p>
 
           <div className="animate-fade-up-delay-1">
@@ -62,10 +65,10 @@ export function Hero() {
           <div className="animate-fade-up-delay-3 mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <OpenStatus />
             <a
-              href="#menu"
+              href={isMenuEnabled() ? "#menu" : "#gallery"}
               className="inline-flex items-center gap-2 rounded-full bg-calmo-beige px-8 py-3.5 font-body text-sm font-medium uppercase tracking-[0.14em] text-calmo-burnt-brown transition-all hover:bg-calmo-blue hover:text-calmo-burnt-brown hover:shadow-lg hover:shadow-calmo-blue/25"
             >
-              View Menu
+              {isMenuEnabled() ? "View Menu" : "Follow along"}
               <ArrowDown className="h-4 w-4" strokeWidth={1.75} />
             </a>
           </div>

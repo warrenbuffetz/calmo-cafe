@@ -9,7 +9,12 @@ export type MenuItem = {
 };
 
 export const menuDisclaimer =
-  "Menu rotates with what's fresh — ask at the counter what's out today. Wine and simple plates coming soon.";
+  "Menu rotates with what's fresh — ask at the counter what's out today.";
+
+export const menuHighlightsTitle = "Counter favorites";
+
+export const menuHighlightsIntro =
+  "Four things we reach for most — a taste of what's on the counter.";
 
 export const menuSectionLabels: Record<MenuSection, string> = {
   coffee: "Coffee",
@@ -22,22 +27,22 @@ export const menuSectionOrder: MenuSection[] = ["coffee", "specialty", "pastry"]
 export const previewMenuItems: MenuItem[] = [
   {
     name: "Passionfruit Vanilla Matcha",
-    description: "House matcha with passionfruit and vanilla.",
+    description: "Bright and balanced — the one people come back for.",
     section: "specialty",
   },
   {
     name: "Basque Cheesecake",
-    description: "Burnt-top cheesecake, rich and creamy.",
+    description: "Burnt top, creamy center — worth grabbing before it sells out.",
     section: "pastry",
   },
   {
-    name: "Orange Blossom Americano",
-    description: "Espresso with orange blossom notes.",
-    section: "specialty",
+    name: "Flat White",
+    description: "Velvety microfoam over espresso — our everyday coffee order.",
+    section: "coffee",
   },
   {
     name: "Strawberry Matcha Tiramisu",
-    description: "Matcha-soaked layers with strawberry.",
+    description: "Matcha-soaked layers with strawberry — the splurge at the counter.",
     section: "pastry",
   },
 ];
@@ -165,6 +170,11 @@ export const extendedMenuItems: MenuItem[] = [
   {
     name: "O.G. Brownie",
     description: "Classic chocolate brownie.",
+    section: "pastry",
+  },
+  {
+    name: "Sticky Toffee Brownie",
+    description: "Rich toffee notes — check the baked goods board.",
     section: "pastry",
   },
   {

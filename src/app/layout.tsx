@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
-import { Barriecito, DM_Sans, Libre_Baskerville, Rubik } from "next/font/google";
+import { Allura, Barriecito, DM_Sans, Libre_Baskerville, Rubik } from "next/font/google";
 import { venue } from "@/lib/venue";
 import "./globals.css";
+
+const allura = Allura({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-allura",
+  display: "swap",
+});
 
 const barriecito = Barriecito({
   weight: "400",
@@ -45,7 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${barriecito.variable} ${rubik.variable} ${dmSans.variable} ${libreBaskerville.variable}`}
+      className={`${allura.variable} ${barriecito.variable} ${rubik.variable} ${dmSans.variable} ${libreBaskerville.variable}`}
     >
       <body className="min-h-screen antialiased">{children}</body>
     </html>

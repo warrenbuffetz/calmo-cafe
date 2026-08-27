@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { isReservationsEnabled } from "@/lib/features";
+import { isMenuEnabled, isReservationsEnabled } from "@/lib/features";
 
 const NAV_LINKS = [
   { href: "/#about", label: "About" },
-  { href: "/#menu", label: "Menu" },
+  ...(isMenuEnabled() ? [{ href: "/#menu", label: "Menu" }] : []),
   ...(isReservationsEnabled() ? [{ href: "/reservations", label: "Reserve" }] : []),
   { href: "/#visit", label: "Visit" },
 ];

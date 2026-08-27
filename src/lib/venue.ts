@@ -15,10 +15,9 @@ export const venue = {
   category: "Cafe & Dessert Bar",
   neighborhood: "Dundas West, Toronto",
   tagline: "Desserts, coffee & calm.",
-  subtitle:
-    "House-made pastries and coffee today. Wine bar and simple plates on the way.",
+  subtitle: "House-made pastries and coffee on Dundas West.",
   description:
-    "A neighborhood cafe bar on Dundas West — house desserts, coffee, and specialty drinks. Wine and simple plates coming soon.",
+    "A neighborhood cafe bar on Dundas West — house desserts, coffee, and specialty drinks.",
   address: {
     line1: "1227 Dundas St W",
     line2: "Toronto, ON M6J 1X6",
