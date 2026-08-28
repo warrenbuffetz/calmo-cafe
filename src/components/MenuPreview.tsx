@@ -102,19 +102,19 @@ function MenuHighlights() {
           className="object-fill"
           sizes="(min-width: 1024px) 42vw, 90vw"
         />
-        <div className="absolute inset-0 flex flex-col px-[13%] pb-[36%] pt-[12%] pr-[18%] sm:px-[14%] sm:pb-[38%] sm:pt-[12.5%] sm:pr-[20%]">
+        <div className="absolute inset-0 flex flex-col px-[13%] pb-[40%] pt-[12%] pr-[18%] sm:px-[14%] sm:pb-[38%] sm:pt-[12.5%] sm:pr-[20%]">
           <p className="font-body text-[10px] font-semibold uppercase tracking-[0.22em] text-calmo-red-brown sm:text-[11px]">
             {menuHighlightsTitle}
           </p>
-          <p className="mt-2 max-w-[14rem] font-body text-[13px] leading-relaxed text-calmo-burnt-brown/70 sm:mt-2.5 sm:text-sm">
+          <p className="mt-2 max-w-[14rem] font-body text-[12px] leading-snug text-calmo-burnt-brown/70 sm:mt-2.5 sm:text-sm sm:leading-relaxed">
             {menuHighlightsIntro}
           </p>
-          <ol className="mt-3 space-y-0 sm:mt-3.5">
+          <ol className="mt-2.5 space-y-0 sm:mt-3.5">
             {previewMenuItems.map((item, index) => (
               <li
                 key={item.name}
                 className={cn(
-                  "flex gap-3 py-2.5 sm:gap-3.5 sm:py-3",
+                  "flex gap-2.5 py-2 sm:gap-3.5 sm:py-3",
                   index > 0 && "border-t border-calmo-burnt-brown/12",
                 )}
               >
@@ -131,7 +131,7 @@ function MenuHighlights() {
                   <h3 className="mt-0.5 font-display text-lg leading-snug text-calmo-burnt-brown sm:text-xl">
                     {item.name}
                   </h3>
-                  <p className="mt-1 font-body text-[12px] leading-relaxed text-calmo-burnt-brown/65 sm:text-sm">
+                  <p className="mt-0.5 line-clamp-2 font-body text-[11px] leading-snug text-calmo-burnt-brown/65 sm:mt-1 sm:line-clamp-none sm:text-sm sm:leading-relaxed">
                     {item.description}
                   </p>
                 </div>
