@@ -55,7 +55,7 @@ function MobileSpreadGrid({
         ))}
       </div>
       {page.freshCallout ? (
-        <FreshFromCounterCallout className="bottom-1 left-0 z-40 translate-y-0 sm:left-1" />
+        <FreshFromCounterCallout flat className="bottom-1 left-0 z-40 translate-y-0 sm:left-1" />
       ) : null}
     </article>
   );

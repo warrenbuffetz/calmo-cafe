@@ -272,7 +272,8 @@ function MaskingTape({
       height={asset.height}
       unoptimized
       className={cn(
-        "absolute z-20 h-auto drop-shadow-[0_1px_3px_rgba(50,27,15,0.14)]",
+        "absolute z-20 h-auto",
+        !compact && "drop-shadow-[0_1px_3px_rgba(50,27,15,0.14)]",
         compact
           ? wide
             ? "w-[3.25rem]"
@@ -295,7 +296,8 @@ function OwnerNoteAccent({ compact }: { compact?: boolean }) {
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none absolute z-30 rotate-[5deg] drop-shadow-[2px_4px_8px_rgba(50,27,15,0.16)]",
+        "pointer-events-none absolute z-30 rotate-[5deg]",
+        !compact && "drop-shadow-[2px_4px_8px_rgba(50,27,15,0.16)]",
         compact
           ? "right-0 -bottom-2 w-[5.75rem] rotate-[4deg]"
           : "-bottom-3 -right-6 w-[7.5rem] sm:-bottom-4 sm:-right-7 sm:w-[8.25rem]",
@@ -313,11 +315,14 @@ function OwnerNoteAccent({ compact }: { compact?: boolean }) {
   );
 }
 
-function PushPinAccent() {
+function PushPinAccent({ compact }: { compact?: boolean }) {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute left-1/2 top-0 z-30 w-9 -translate-x-1/2 -translate-y-[45%] drop-shadow-[0_2px_5px_rgba(50,27,15,0.28)] sm:w-10"
+      className={cn(
+        "pointer-events-none absolute left-1/2 top-0 z-30 w-9 -translate-x-1/2 -translate-y-[45%] sm:w-10",
+        !compact && "drop-shadow-[0_2px_5px_rgba(50,27,15,0.28)]",
+      )}
     >
       <Image
         src="/gallery/gallery-pin.png"
@@ -375,7 +380,13 @@ function PhotoTape({
   );
 }
 
-export function FreshFromCounterCallout({ className }: { className?: string }) {
+export function FreshFromCounterCallout({
+  className,
+  flat,
+}: {
+  className?: string;
+  flat?: boolean;
+}) {
   return (
     <div
       aria-hidden
@@ -390,7 +401,10 @@ export function FreshFromCounterCallout({ className }: { className?: string }) {
         width={634}
         height={721}
         unoptimized
-        className="h-auto w-[7rem] drop-shadow-[0_1px_0_rgba(243,238,215,0.35)] sm:w-[7.8rem] lg:w-[8.2rem]"
+        className={cn(
+          "h-auto w-[7rem] sm:w-[7.8rem] lg:w-[8.2rem]",
+          !flat && "drop-shadow-[0_1px_0_rgba(243,238,215,0.35)]",
+        )}
       />
     </div>
   );
@@ -468,15 +482,17 @@ export function GalleryTile({
       className={cn("group relative block hover:z-40", placement, className)}
     >
       <div className="transition-transform duration-500 ease-out group-hover:-translate-y-1">
-        {pushPin && <PushPinAccent />}
+        {pushPin && <PushPinAccent compact={compact} />}
         {tape && <PhotoTape variant={tape} tapeRotate={tapeRotate} compact={compact} />}
         {ownerNote && <OwnerNoteAccent compact={compactAccents} />}
         {kraftNote && <GalleryKraftNote compact={compactAccents} />}
 
         <div
           className={cn(
-            "overflow-hidden rounded-sm bg-white shadow-[3px_6px_0_rgba(50,27,15,0.09)] transition-shadow duration-500 group-hover:shadow-[5px_10px_0_rgba(50,27,15,0.12)]",
-            compact ? "p-1" : "p-1.5 md:p-2",
+            "overflow-hidden rounded-sm bg-white",
+            compact
+              ? "p-1"
+              : "p-1.5 shadow-[3px_6px_0_rgba(50,27,15,0.09)] transition-shadow duration-500 group-hover:shadow-[5px_10px_0_rgba(50,27,15,0.12)] md:p-2",
           )}
         >
           <div className={cn("relative w-full overflow-hidden", aspect)}>
@@ -492,7 +508,12 @@ export function GalleryTile({
         </div>
 
         <div className="pointer-events-none absolute inset-0 rounded-sm bg-calmo-burnt-brown/0 transition-colors duration-300 group-hover:bg-calmo-burnt-brown/8" />
-        <span className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-calmo-beige/95 p-2 text-calmo-burnt-brown opacity-0 shadow-sm transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 md:bottom-5 md:right-5">
+        <span
+          className={cn(
+            "pointer-events-none absolute bottom-4 right-4 rounded-full bg-calmo-beige/95 p-2 text-calmo-burnt-brown opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100 md:bottom-5 md:right-5",
+            !compact && "shadow-sm",
+          )}
+        >
           <Instagram className="h-3.5 w-3.5" strokeWidth={1.75} />
         </span>
       </div>
@@ -505,7 +526,8 @@ function GalleryKraftNote({ compact }: { compact?: boolean }) {
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none absolute z-[32] drop-shadow-[4px_9px_18px_rgba(50,27,15,0.26)]",
+        "pointer-events-none absolute z-[32]",
+        !compact && "drop-shadow-[4px_9px_18px_rgba(50,27,15,0.26)]",
         compact
           ? "top-full right-0 mt-1 w-[7.5rem] rotate-[1deg]"
           : "top-full right-[-0.25rem] mt-2 w-[10.5rem] rotate-[1.5deg] sm:mt-3 sm:w-[11.5rem] lg:right-0 lg:w-[12.5rem] lg:rotate-[2deg]",
