@@ -2,9 +2,11 @@ import Image from "next/image";
 import { Clock, Instagram, Mail, MapPin } from "lucide-react";
 import { SketchField } from "@/components/SketchField";
 import { footerSectionSurface, sectionShell } from "@/lib/section";
+import type { VenueHours } from "@/lib/venue";
 import { venue } from "@/lib/venue";
 
-const { hours, address } = venue;
+const { address } = venue;
+const defaultHours = [...venue.hours] as VenueHours[];
 
 const fullAddress = `${address.line1}, ${address.line2}`;
 
@@ -22,7 +24,7 @@ function FooterCopyright() {
   );
 }
 
-function FooterMobile() {
+function FooterMobile({ hours }: { hours: VenueHours[] }) {
   return (
     <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-8 md:hidden">
       <Image
@@ -141,7 +143,7 @@ function FooterMobile() {
   );
 }
 
-function FooterDesktop() {
+function FooterDesktop({ hours }: { hours: VenueHours[] }) {
   return (
     <>
       <div className="relative z-10 mx-auto hidden max-w-6xl gap-12 md:grid md:grid-cols-2 lg:grid-cols-4">
@@ -265,7 +267,7 @@ function FooterDesktop() {
   );
 }
 
-export function Footer() {
+export function Footer({ hours = defaultHours }: { hours?: VenueHours[] }) {
   return (
     <footer
       id="visit"
@@ -281,8 +283,8 @@ export function Footer() {
           },
         ]}
       />
-      <FooterMobile />
-      <FooterDesktop />
+      <FooterMobile hours={hours} />
+      <FooterDesktop hours={hours} />
     </footer>
   );
 }

@@ -1,13 +1,9 @@
 import Image from "next/image";
 import { calmoBlurDataURL } from "@/lib/image";
 import { MenuFavoritesFit } from "@/components/MenuFavoritesFit";
-import {
-  menuHighlightsIntro,
-  menuHighlightsTitle,
-  menuSectionLabels,
-  previewMenuItems,
-} from "@/lib/menu";
 import { SketchField } from "@/components/SketchField";
+import type { CounterFavoritesContent } from "@/lib/cms/types";
+import { menuSectionLabels } from "@/lib/menu";
 import { menuSectionSurface, sectionShell } from "@/lib/section";
 import { cn } from "@/lib/utils";
 
@@ -90,7 +86,7 @@ function MenuBoardPhotos() {
   );
 }
 
-function MenuHighlights() {
+function MenuHighlights({ counterFavorites }: { counterFavorites: CounterFavoritesContent }) {
   return (
     <div className="relative mx-auto w-full max-w-[24rem] sm:max-w-[26rem] lg:mx-0 lg:-mt-10 lg:max-w-none xl:-mt-12">
       <div className="@container/paper relative aspect-[712/1005] w-full">
@@ -108,13 +104,13 @@ function MenuHighlights() {
           className="absolute inset-0 flex flex-col px-[13%] pb-[40%] pt-[12%] pr-[18%] sm:px-[14%] sm:pb-[38%] sm:pt-[12.5%] sm:pr-[20%]"
         >
           <p className="font-body text-[10px] font-semibold uppercase tracking-[0.22em] text-calmo-red-brown sm:text-[11px]">
-            {menuHighlightsTitle}
+            {counterFavorites.title}
           </p>
           <p className="mt-2 max-w-[14rem] font-body text-[12px] leading-snug text-calmo-burnt-brown/70 sm:mt-2.5 sm:text-sm sm:leading-relaxed">
-            {menuHighlightsIntro}
+            {counterFavorites.intro}
           </p>
           <ol className="mt-2.5 space-y-0 sm:mt-3.5">
-            {previewMenuItems.map((item, index) => (
+            {counterFavorites.items.map((item, index) => (
               <li
                 key={item.name}
                 className={cn(
@@ -149,7 +145,11 @@ function MenuHighlights() {
   );
 }
 
-export function MenuPreview() {
+export function MenuPreview({
+  counterFavorites,
+}: {
+  counterFavorites: CounterFavoritesContent;
+}) {
   return (
     <section id="menu" className={`${sectionShell} ${menuSectionSurface} relative overflow-x-clip`}>
       <SketchField
@@ -196,7 +196,7 @@ export function MenuPreview() {
 
         <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-2 lg:items-start lg:gap-14">
           <MenuBoardPhotos />
-          <MenuHighlights />
+          <MenuHighlights counterFavorites={counterFavorites} />
         </div>
       </div>
     </section>

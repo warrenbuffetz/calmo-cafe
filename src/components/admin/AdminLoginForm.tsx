@@ -33,7 +33,7 @@ export function AdminLoginForm() {
         return;
       }
 
-      const next = searchParams.get("next") ?? "/reservations/admin";
+      const next = searchParams.get("next") ?? "/admin";
       router.push(next);
       router.refresh();
     } catch {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { venue, isOpenHours } from "@/lib/venue";
+import { isOpenHours, type VenueHours } from "@/lib/venue";
 
 const DAY_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const WEEKDAY_INDEX: Record<string, number> = {
@@ -44,10 +44,10 @@ function torontoNow() {
 
 type Status = { open: boolean; text: string };
 
-function computeStatus(): Status {
+function computeStatus(hours: VenueHours[]): Status {
   const { day, minutes } = torontoNow();
 
-  const todayEntry = venue.hours.find((h) => h.dayIdx.includes(day));
+  const todayEntry = hours.find((h) => h.dayIdx.includes(day));
   if (todayEntry && isOpenHours(todayEntry)) {
     const opensAt = toMinutes(todayEntry.open);
     const closesAt = toMinutes(todayEntry.close);
@@ -61,7 +61,7 @@ function computeStatus(): Status {
 
   for (let i = 1; i <= 7; i++) {
     const nextDay = (day + i) % 7;
-    const entryRaw = venue.hours.find((h) => h.dayIdx.includes(nextDay));
+    const entryRaw = hours.find((h) => h.dayIdx.includes(nextDay));
     if (entryRaw && isOpenHours(entryRaw)) {
       return { open: false, text: `Opens ${label(entryRaw.open)} ${DAY_SHORT[nextDay]}` };
     }
@@ -70,14 +70,16 @@ function computeStatus(): Status {
   return { open: false, text: "Closed" };
 }
 
-export function OpenStatus() {
-  // Time-dependent and timezone-aware: compute after mount so server and client
-  // first render match (avoids hydration mismatch).
+type OpenStatusProps = {
+  hours: VenueHours[];
+};
+
+export function OpenStatus({ hours }: OpenStatusProps) {
   const [status, setStatus] = useState<Status | null>(null);
 
   useEffect(() => {
-    setStatus(computeStatus());
-  }, []);
+    setStatus(computeStatus(hours));
+  }, [hours]);
 
   if (!status) return null;
 

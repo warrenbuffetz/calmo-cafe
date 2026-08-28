@@ -1,11 +1,17 @@
 import Image from "next/image";
 import { OpenStatus } from "@/components/OpenStatus";
+import type { HeroCopyContent } from "@/lib/cms/types";
 import { isMenuEnabled } from "@/lib/features";
 import { sectionX } from "@/lib/section";
-import { venue } from "@/lib/venue";
+import type { VenueHours } from "@/lib/venue";
 import { ArrowDown } from "lucide-react";
 
-export function Hero() {
+type HeroProps = {
+  hero: HeroCopyContent;
+  hours: VenueHours[];
+};
+
+export function Hero({ hero, hours }: HeroProps) {
   return (
     <section className="relative h-screen w-full overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
@@ -37,9 +43,9 @@ export function Hero() {
       >
         <div className="mx-auto flex max-w-4xl flex-col items-center">
           <p className="animate-fade-up mb-6 font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-beige/90 [text-shadow:0_1px_10px_rgba(50,27,15,0.55)]">
-            {venue.neighborhood}
+            {hero.neighborhood}
             <span className="text-calmo-beige/55"> · </span>
-            <span className="text-calmo-blue">Walk-ins only</span>
+            <span className="text-calmo-blue">{hero.walkInsLabel}</span>
           </p>
 
           <div className="animate-fade-up-delay-1">
@@ -55,15 +61,15 @@ export function Hero() {
           </div>
 
           <h1 className="animate-fade-up-delay-2 mt-8 max-w-2xl font-title1 text-3xl font-bold leading-tight tracking-tight text-calmo-beige sm:text-4xl md:text-5xl [text-shadow:0_2px_14px_rgba(50,27,15,0.65)]">
-            {venue.tagline}
+            {hero.tagline}
           </h1>
 
           <p className="animate-fade-up-delay-2 mt-4 max-w-md font-body text-sm leading-relaxed text-calmo-beige/80 sm:text-base [text-shadow:0_1px_10px_rgba(50,27,15,0.55)]">
-            {venue.subtitle}
+            {hero.subtitle}
           </p>
 
           <div className="animate-fade-up-delay-3 mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-            <OpenStatus />
+            <OpenStatus hours={hours} />
             <a
               href={isMenuEnabled() ? "#menu" : "#gallery"}
               className="inline-flex items-center gap-2 rounded-full bg-calmo-beige px-8 py-3.5 font-body text-sm font-medium uppercase tracking-[0.14em] text-calmo-burnt-brown transition-all hover:bg-calmo-blue hover:text-calmo-burnt-brown hover:shadow-lg hover:shadow-calmo-blue/25"

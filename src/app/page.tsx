@@ -4,19 +4,25 @@ import { Gallery } from "@/components/Gallery";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { MenuPreview } from "@/components/MenuPreview";
+import { getCounterFavorites, getSiteCopy } from "@/lib/cms/queries";
 import { isMenuEnabled } from "@/lib/features";
 
-export default function Home() {
+export default async function Home() {
+  const [counterFavorites, siteCopy] = await Promise.all([
+    getCounterFavorites(),
+    getSiteCopy(),
+  ]);
+
   return (
     <>
       <Header />
       <main>
-        <Hero />
-        <About />
-        {isMenuEnabled() && <MenuPreview />}
+        <Hero hero={siteCopy.hero} hours={siteCopy.hours} />
+        <About about={siteCopy.about} />
+        {isMenuEnabled() && <MenuPreview counterFavorites={counterFavorites} />}
         <Gallery />
       </main>
-      <Footer />
+      <Footer hours={siteCopy.hours} />
     </>
   );
 }
