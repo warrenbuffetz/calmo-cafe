@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { calmoBlurDataURL } from "@/lib/image";
+import { MenuFavoritesFit } from "@/components/MenuFavoritesFit";
 import {
   menuHighlightsIntro,
   menuHighlightsTitle,
@@ -102,7 +103,10 @@ function MenuHighlights() {
           className="object-fill"
           sizes="(min-width: 1024px) 42vw, 90vw"
         />
-        <div className="absolute inset-0 flex flex-col px-[13%] pb-[40%] pt-[12%] pr-[18%] sm:px-[14%] sm:pb-[38%] sm:pt-[12.5%] sm:pr-[20%]">
+        <div
+          id="menu-favorites-content"
+          className="absolute inset-0 flex flex-col px-[13%] pb-[40%] pt-[12%] pr-[18%] sm:px-[14%] sm:pb-[38%] sm:pt-[12.5%] sm:pr-[20%]"
+        >
           <p className="font-body text-[10px] font-semibold uppercase tracking-[0.22em] text-calmo-red-brown sm:text-[11px]">
             {menuHighlightsTitle}
           </p>
@@ -139,6 +143,7 @@ function MenuHighlights() {
             ))}
           </ol>
         </div>
+        <MenuFavoritesFit targetId="menu-favorites-content" />
       </div>
     </div>
   );

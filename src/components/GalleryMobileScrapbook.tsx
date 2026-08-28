@@ -22,7 +22,7 @@ function MobileSpreadGrid({
   return (
     <article
       data-scrapbook-page
-      className="relative shrink-0 basis-[94%] snap-center snap-always"
+      className="relative shrink-0 basis-[94%] snap-center"
     >
       <div className="grid grid-cols-2 auto-rows-auto">
         {page.cells.map((cell, cellIndex) => (
@@ -115,7 +115,8 @@ export function GalleryMobileScrapbook({ pages }: GalleryMobileScrapbookProps) {
         onScroll={handleScroll}
         aria-label="Instagram scrapbook gallery"
         className={cn(
-          "flex touch-pan-x snap-x snap-mandatory items-start gap-3 overflow-x-auto overflow-y-hidden overscroll-x-contain",
+          "flex snap-x snap-proximity items-start gap-3 overflow-x-auto overflow-y-visible",
+          "[touch-action:pan-x_pan-y] overscroll-x-contain overscroll-y-auto",
           "px-[3%]",
           "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
         )}
