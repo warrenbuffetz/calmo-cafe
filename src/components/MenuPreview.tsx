@@ -1,12 +1,12 @@
 import Image from "next/image";
+import { calmoBlurDataURL } from "@/lib/image";
 import {
-  menuDisclaimer,
   menuHighlightsIntro,
   menuHighlightsTitle,
   menuSectionLabels,
   previewMenuItems,
 } from "@/lib/menu";
-import { sectionShell, sectionSurfaceTint } from "@/lib/section";
+import { menuSectionSurface, sectionShell } from "@/lib/section";
 import { cn } from "@/lib/utils";
 
 type MenuPolaroidProps = {
@@ -50,11 +50,13 @@ function MenuPolaroid({
             : "shadow-[3px_6px_0_rgba(50,27,15,0.09)]",
         )}
       >
-        <div className={cn("relative w-full overflow-hidden bg-calmo-beige/30", aspect)}>
+        <div className={cn("relative w-full overflow-hidden bg-calmo-beige/50", aspect)}>
           <Image
             src={src}
             alt={alt}
             fill
+            placeholder="blur"
+            blurDataURL={calmoBlurDataURL}
             className="object-contain object-center"
             sizes="(min-width: 1024px) 42vw, 90vw"
             priority={priority}
@@ -88,45 +90,69 @@ function MenuBoardPhotos() {
 
 function MenuHighlights() {
   return (
-    <div className="flex flex-col justify-center">
-      <p className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-calmo-burnt-brown/45">
-        {menuHighlightsTitle}
-      </p>
-      <p className="mt-3 max-w-md font-body text-sm leading-relaxed text-calmo-burnt-brown/65">
-        {menuHighlightsIntro}
-      </p>
-      <ul className="mt-5 divide-y divide-calmo-burnt-brown/10">
-        {previewMenuItems.map((item) => (
-          <li key={item.name} className="py-4 first:pt-0 last:pb-0">
-            <p className="font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-calmo-red-brown/80">
-              {menuSectionLabels[item.section]}
-            </p>
-            <h3 className="mt-1 font-display text-xl leading-snug text-calmo-burnt-brown sm:text-[1.35rem]">
-              {item.name}
-            </h3>
-            <p className="mt-1.5 font-body text-sm leading-relaxed text-calmo-burnt-brown/65">
-              {item.description}
-            </p>
-          </li>
-        ))}
-      </ul>
-      <p className="mt-6 font-accent text-sm italic leading-relaxed text-calmo-burnt-brown/55">
-        {menuDisclaimer}
-      </p>
+    <div className="relative mx-auto w-full max-w-[24rem] sm:max-w-[26rem] lg:mx-0 lg:-mt-10 lg:max-w-none xl:-mt-12">
+      <div className="@container/paper relative aspect-[769/1024] w-full">
+        <Image
+          src="/gallery/menu-counter-paper.png"
+          alt=""
+          aria-hidden
+          fill
+          unoptimized
+          className="object-fill"
+          sizes="(min-width: 1024px) 42vw, 90vw"
+        />
+        <div className="absolute inset-0 flex flex-col px-[13%] pb-[36%] pt-[12%] pr-[18%] sm:px-[14%] sm:pb-[38%] sm:pt-[12.5%] sm:pr-[20%]">
+          <p className="font-body text-[10px] font-semibold uppercase tracking-[0.22em] text-calmo-red-brown sm:text-[11px]">
+            {menuHighlightsTitle}
+          </p>
+          <p className="mt-2 max-w-[14rem] font-body text-[13px] leading-relaxed text-calmo-burnt-brown/70 sm:mt-2.5 sm:text-sm">
+            {menuHighlightsIntro}
+          </p>
+          <ol className="mt-3 space-y-0 sm:mt-3.5">
+            {previewMenuItems.map((item, index) => (
+              <li
+                key={item.name}
+                className={cn(
+                  "flex gap-3 py-2.5 sm:gap-3.5 sm:py-3",
+                  index > 0 && "border-t border-calmo-burnt-brown/12",
+                )}
+              >
+                <span
+                  aria-hidden
+                  className="w-5 shrink-0 pt-0.5 font-body text-xs tabular-nums text-calmo-burnt-brown/35 sm:text-sm"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="font-body text-[9px] font-semibold uppercase tracking-[0.18em] text-calmo-red-brown/85 sm:text-[10px]">
+                    {menuSectionLabels[item.section]}
+                  </p>
+                  <h3 className="mt-0.5 font-display text-lg leading-snug text-calmo-burnt-brown sm:text-xl">
+                    {item.name}
+                  </h3>
+                  <p className="mt-1 font-body text-[12px] leading-relaxed text-calmo-burnt-brown/65 sm:text-sm">
+                    {item.description}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
     </div>
   );
 }
 
 export function MenuPreview() {
   return (
-    <section id="menu" className={`${sectionShell} ${sectionSurfaceTint} relative overflow-x-clip`}>
+    <section id="menu" className={`${sectionShell} ${menuSectionSurface} relative overflow-x-clip`}>
       <div className="relative z-10 mx-auto max-w-6xl">
         <header className="max-w-2xl">
           <p className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">
             Menu
           </p>
           <h2 className="mt-4 font-title text-3xl font-bold tracking-tight text-calmo-burnt-brown sm:text-4xl md:text-5xl">
-            Dessert, coffee & counter.
+            From the counter.
           </h2>
         </header>
 

@@ -14,7 +14,7 @@
   --font-text1: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
   --font-accent: var(--font-libre-baskerville), ui-serif, Georgia, serif;
   --font-text2: var(--font-libre-baskerville), ui-serif, Georgia, serif;
-  --font-hand: var(--font-allura), "Snell Roundhand", "Segoe Script", cursive;
+  --font-hand: var(--font-caveat), var(--font-allura), "Snell Roundhand", "Segoe Script", cursive;
 }
 
 html {

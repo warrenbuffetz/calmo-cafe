@@ -9,7 +9,7 @@ export type MenuItem = {
 };
 
 export const menuDisclaimer =
-  "Menu rotates with what's fresh — ask at the counter what's out today.";
+  "Menu changes with what's fresh today.";
 
 export const menuHighlightsTitle = "Counter favorites";
 

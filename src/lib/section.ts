@@ -7,4 +7,6 @@ export const sectionContent = `${sectionX} ${sectionY}`;
 
 /** Alternating section bands — warm lift vs page cream */
 export const sectionSurfaceTint = "bg-white/20";
+/** Menu section — matched to menu-counter-paper.png baked-in background */
+export const menuSectionSurface = "bg-[#f6efde]";
 export const sectionSurfaceBase = "bg-calmo-beige";

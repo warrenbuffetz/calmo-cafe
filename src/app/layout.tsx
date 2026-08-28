@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
-import { Allura, Barriecito, DM_Sans, Libre_Baskerville, Rubik } from "next/font/google";
+import { Allura, Barriecito, Caveat, DM_Sans, Libre_Baskerville, Rubik } from "next/font/google";
 import { venue } from "@/lib/venue";
 import "./globals.css";
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-caveat",
+  display: "swap",
+});
 
 const allura = Allura({
   weight: "400",
@@ -52,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${allura.variable} ${barriecito.variable} ${rubik.variable} ${dmSans.variable} ${libreBaskerville.variable}`}
+      className={`${allura.variable} ${barriecito.variable} ${caveat.variable} ${rubik.variable} ${dmSans.variable} ${libreBaskerville.variable}`}
     >
       <body className="min-h-screen antialiased">{children}</body>
     </html>
