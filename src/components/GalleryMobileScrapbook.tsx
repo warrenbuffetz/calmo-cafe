@@ -19,44 +19,64 @@ function MobileSpreadGrid({
   page: MobileSpreadPage;
   pageIndex: number;
 }) {
-  const hasNoteAccents = page.cells.some((cell) => cell.kraftNote || cell.ownerNote);
-
   return (
     <article
       data-scrapbook-page
-      className={cn(
-        "relative shrink-0 basis-[88%] snap-center snap-always overflow-visible",
-        page.freshCallout && "pb-10",
-        hasNoteAccents && "pb-12",
-      )}
+      className="relative shrink-0 basis-[94%] snap-center snap-always"
     >
-      <div className="grid grid-cols-2 auto-rows-auto pt-4">
-        {page.cells.map((cell) => (
+      <div className="grid grid-cols-2 auto-rows-auto">
+        {page.cells.map((cell, cellIndex) => (
           <div
             key={cell.src}
-            className={cn("relative -mx-2.5 -mb-2.5 sm:-mx-3 sm:-mb-3", cell.slotClassName)}
+            className={cn(
+              "relative -mx-2 sm:-mx-2.5",
+              cellIndex < 2 && "pt-6",
+              cellIndex < 2 ? "-mb-2 sm:-mb-2.5" : null,
+              cellIndex >= 2 && "pb-14",
+              cell.kraftNote && "pb-[4.75rem]",
+              cell.ownerNote && "pb-16",
+              cell.slotClassName,
+            )}
           >
-            <GalleryTile
-              src={cell.src}
-              alt={cell.alt}
-              aspect={cell.aspect}
-              placement="relative block w-full"
-              tape={cell.tape}
-              tapeRotate={cell.tapeRotate}
-              ownerNote={cell.ownerNote}
-              kraftNote={cell.kraftNote}
-              pushPin={cell.pushPin}
-              compact
-              compactAccents
-              sizes="42vw"
-              priority={pageIndex === 0}
-            />
+            {page.freshCallout && cellIndex === 0 ? (
+              <div className="relative pb-[7rem]">
+                <GalleryTile
+                  src={cell.src}
+                  alt={cell.alt}
+                  aspect={cell.aspect}
+                  placement="relative block w-full"
+                  tape={cell.tape}
+                  tapeRotate={cell.tapeRotate}
+                  ownerNote={cell.ownerNote}
+                  kraftNote={cell.kraftNote}
+                  pushPin={cell.pushPin}
+                  compact
+                  compactAccents
+                  sizes="46vw"
+                  priority={pageIndex === 0}
+                />
+                <FreshFromCounterCallout flat anchoredBelow />
+              </div>
+            ) : (
+              <GalleryTile
+                src={cell.src}
+                alt={cell.alt}
+                aspect={cell.aspect}
+                placement="relative block w-full"
+                tape={cell.tape}
+                tapeRotate={cell.tapeRotate}
+                ownerNote={cell.ownerNote}
+                kraftNote={cell.kraftNote}
+                pushPin={cell.pushPin}
+                compact
+                compactAccents
+                sizes="46vw"
+                priority={pageIndex === 0}
+              />
+            )}
           </div>
         ))}
       </div>
-      {page.freshCallout ? (
-        <FreshFromCounterCallout flat className="bottom-1 left-0 z-40 translate-y-0 sm:left-1" />
-      ) : null}
     </article>
   );
 }
@@ -95,8 +115,8 @@ export function GalleryMobileScrapbook({ pages }: GalleryMobileScrapbookProps) {
         onScroll={handleScroll}
         aria-label="Instagram scrapbook gallery"
         className={cn(
-          "flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain",
-          "px-[6%] pt-6 pb-1",
+          "flex touch-pan-x snap-x snap-mandatory items-start gap-3 overflow-x-auto overflow-y-hidden overscroll-x-contain",
+          "px-[3%]",
           "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
         )}
         style={{ WebkitOverflowScrolling: "touch" }}
@@ -104,10 +124,10 @@ export function GalleryMobileScrapbook({ pages }: GalleryMobileScrapbookProps) {
         {pages.map((page, index) => (
           <MobileSpreadGrid key={`spread-${index}`} page={page} pageIndex={index} />
         ))}
-        <div aria-hidden className="w-4 shrink-0" />
+        <div aria-hidden className="w-3 shrink-0" />
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-4 px-[6%]">
+      <div className="mt-4 flex items-center justify-between gap-4 px-[3%]">
         <p
           className={cn(
             "font-body text-[10px] font-medium uppercase tracking-[0.22em] text-calmo-blue transition-opacity duration-300",

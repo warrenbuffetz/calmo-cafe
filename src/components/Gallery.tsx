@@ -176,11 +176,11 @@ const mobileSpreadPages: MobileSpreadPage[] = [
         aspect: pastriesItem.aspect,
         tape: pastriesItem.tape,
         tapeRotate: pastriesItem.tapeRotate,
-        slotClassName: "z-30 -translate-x-0.5 -translate-y-0.5 -rotate-[1deg]",
+        slotClassName: "z-30 -translate-x-0.5 -rotate-[1deg]",
       },
       mobileCell(
         "/gallery/gallery-sign.jpg",
-        "z-10 translate-x-1 -translate-y-2 rotate-[1.5deg]",
+        "z-10 translate-x-1 rotate-[1.5deg]",
       ),
       mobileCell(
         "/gallery/gallery-counter.jpg",
@@ -198,12 +198,12 @@ const mobileSpreadPages: MobileSpreadPage[] = [
     cells: [
       mobileCell(
         "/gallery/gallery-prep-mixing.jpg",
-        "z-20 -translate-x-1 -translate-y-1 -rotate-[1.5deg]",
+        "z-20 -translate-x-1 -rotate-[1.5deg]",
         { tape: "grid", tapeRotate: "-rotate-[2deg]" },
       ),
       mobileCell(
         "/gallery/gallery-counter-labeling.jpg",
-        "z-10 translate-x-1 -translate-y-2 rotate-[1deg]",
+        "z-10 translate-x-1 rotate-[1deg]",
         { tape: "plain", tapeRotate: "rotate-[0.5deg]" },
       ),
       mobileCell(
@@ -383,15 +383,21 @@ function PhotoTape({
 export function FreshFromCounterCallout({
   className,
   flat,
+  anchoredBelow,
 }: {
   className?: string;
   flat?: boolean;
+  /** Pin below a polaroid with the arrow tip touching the photo bottom (mobile scrapbook). */
+  anchoredBelow?: boolean;
 }) {
   return (
     <div
       aria-hidden
       className={cn(
-        "pointer-events-none absolute bottom-0 left-1 z-20 translate-y-[32%] sm:left-3",
+        "pointer-events-none absolute z-20",
+        anchoredBelow
+          ? "left-1 top-full w-fit -translate-y-full"
+          : "bottom-0 left-1 translate-y-[32%] sm:left-3",
         className,
       )}
     >
