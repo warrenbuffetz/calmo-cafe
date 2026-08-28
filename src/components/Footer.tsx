@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Clock, Instagram, Mail, MapPin } from "lucide-react";
 import { SketchField } from "@/components/SketchField";
-import { sectionShell, sectionSurfaceTint } from "@/lib/section";
+import { footerSectionSurface, sectionShell } from "@/lib/section";
 import { venue } from "@/lib/venue";
 
 const { hours, address } = venue;
@@ -11,7 +11,7 @@ const followLinkClassName =
 
 export function Footer() {
   return (
-    <footer id="visit" className={`${sectionShell} ${sectionSurfaceTint} relative overflow-x-clip`}>
+    <footer id="visit" className={`${sectionShell} ${footerSectionSurface} relative overflow-x-clip`}>
       <SketchField
         items={[
           {
