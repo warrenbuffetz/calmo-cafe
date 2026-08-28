@@ -115,8 +115,8 @@ export function GalleryMobileScrapbook({ pages }: GalleryMobileScrapbookProps) {
         onScroll={handleScroll}
         aria-label="Instagram scrapbook gallery"
         className={cn(
-          "flex snap-x snap-proximity items-start gap-3 overflow-x-auto overflow-y-visible",
-          "[touch-action:pan-x_pan-y] overscroll-x-contain overscroll-y-auto",
+          "flex snap-x snap-proximity items-start gap-3 overflow-x-auto overflow-y-hidden",
+          "[touch-action:pan-x_pan-y] overscroll-x-contain overscroll-y-none",
           "px-[3%]",
           "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
         )}
