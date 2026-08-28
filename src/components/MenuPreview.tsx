@@ -6,6 +6,7 @@ import {
   menuSectionLabels,
   previewMenuItems,
 } from "@/lib/menu";
+import { SketchField } from "@/components/SketchField";
 import { menuSectionSurface, sectionShell } from "@/lib/section";
 import { cn } from "@/lib/utils";
 
@@ -91,7 +92,7 @@ function MenuBoardPhotos() {
 function MenuHighlights() {
   return (
     <div className="relative mx-auto w-full max-w-[24rem] sm:max-w-[26rem] lg:mx-0 lg:-mt-10 lg:max-w-none xl:-mt-12">
-      <div className="@container/paper relative aspect-[769/1024] w-full">
+      <div className="@container/paper relative aspect-[712/1005] w-full">
         <Image
           src="/gallery/menu-counter-paper.png"
           alt=""
@@ -146,6 +147,38 @@ function MenuHighlights() {
 export function MenuPreview() {
   return (
     <section id="menu" className={`${sectionShell} ${menuSectionSurface} relative overflow-x-clip`}>
+      <SketchField
+        items={[
+          {
+            src: "/sketch-dish.png",
+            width: 1024,
+            height: 964,
+            className:
+              "hidden lg:block -left-20 -top-16 w-[14rem] -rotate-6 opacity-[0.08]",
+          },
+          {
+            src: "/sketch-brunch.png",
+            width: 733,
+            height: 1024,
+            className:
+              "hidden lg:block right-[4%] top-[22%] w-[12rem] rotate-6 opacity-[0.07]",
+          },
+          {
+            src: "/sketch-cup.png",
+            width: 910,
+            height: 1024,
+            className:
+              "hidden lg:block left-6 top-[40%] w-[12rem] -rotate-6 opacity-[0.15]",
+          },
+          {
+            src: "/sketch-plate.png",
+            width: 741,
+            height: 1024,
+            className:
+              "hidden lg:block -right-28 -bottom-32 w-[23rem] opacity-[0.18]",
+          },
+        ]}
+      />
       <div className="relative z-10 mx-auto max-w-6xl">
         <header className="max-w-2xl">
           <p className="font-body text-xs font-medium uppercase tracking-[0.28em] text-calmo-red-brown">

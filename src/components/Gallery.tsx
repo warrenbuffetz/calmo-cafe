@@ -236,7 +236,7 @@ function FreshFromCounterCallout() {
         width={634}
         height={721}
         unoptimized
-        className="h-auto w-[8.75rem] drop-shadow-[0_1px_0_rgba(243,238,215,0.35)] sm:w-[9.75rem] lg:w-[10.25rem]"
+        className="h-auto w-[7rem] drop-shadow-[0_1px_0_rgba(243,238,215,0.35)] sm:w-[7.8rem] lg:w-[8.2rem]"
       />
     </div>
   );
@@ -388,7 +388,19 @@ export function Gallery() {
             src: "/sketch-loops.png",
             width: 844,
             height: 1024,
+            className: "hidden lg:block -left-24 -top-20 w-[22rem] opacity-[0.06]",
+          },
+          {
+            src: "/sketch-loops.png",
+            width: 844,
+            height: 1024,
             className: "hidden lg:block -left-24 -bottom-24 w-[24rem] opacity-[0.07]",
+          },
+          {
+            src: "/sketch-brunch.png",
+            width: 733,
+            height: 1024,
+            className: "hidden lg:block -right-20 -top-16 w-[16rem] rotate-6 opacity-[0.05]",
           },
           {
             src: "/sketch-brunch.png",
@@ -422,19 +434,6 @@ export function Gallery() {
             ))}
           </div>
         </div>
-
-        <p className="mt-12 text-center font-body text-sm text-calmo-burnt-brown/60 lg:mt-14">
-          <Link
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-calmo-red-brown transition-colors hover:text-calmo-blue"
-          >
-            @calmo.cafebar
-          </Link>
-          {" · "}
-          New posts weekly
-        </p>
       </div>
     </section>
   );
