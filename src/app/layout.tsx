@@ -49,6 +49,8 @@ const libreBaskerville = Libre_Baskerville({
 export const metadata: Metadata = {
   title: `Calmo — ${venue.tagline}`,
   description: venue.description,
+  // Pre-launch: hide from search until the official domain goes live.
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
